@@ -1,0 +1,71 @@
+/* ==========================================================================
+   Self-hosted variable fonts.
+
+   Hosted rather than linked so the installed PWA works with no network at all,
+   and so the app makes no third-party request. Each family ships two subsets:
+   `hebrew` carries the letters, the full nikud set and the ◌ carrier the game
+   draws marks on; `latin` carries the digits used by scores and timers.
+
+   All three faces include GPOS mark positioning, which is what puts a חולם
+   above its letter and a קמץ below it in the solved-word reveal.
+
+   Paths are relative on purpose: the bundler emits these into media/ next to
+   the stylesheet, which keeps them resolvable under a GitHub Pages subpath.
+   ========================================================================== */
+
+$hebrew-range: 'U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F';
+$latin-range: 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD';
+
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('./fonts/fredoka-hebrew.woff2') format('woff2');
+  unicode-range: #{$hebrew-range};
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('./fonts/fredoka-latin.woff2') format('woff2');
+  unicode-range: #{$latin-range};
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('./fonts/rubik-hebrew.woff2') format('woff2');
+  unicode-range: #{$hebrew-range};
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('./fonts/rubik-latin.woff2') format('woff2');
+  unicode-range: #{$latin-range};
+}
+
+@font-face {
+  font-family: 'Noto Sans Hebrew';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./fonts/noto-hebrew-hebrew.woff2') format('woff2');
+  unicode-range: #{$hebrew-range};
+}
+
+@font-face {
+  font-family: 'Noto Sans Hebrew';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./fonts/noto-hebrew-latin.woff2') format('woff2');
+  unicode-range: #{$latin-range};
+}

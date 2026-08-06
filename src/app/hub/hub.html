@@ -1,0 +1,103 @@
+<div class="hub pg-shell">
+  <header class="hub__hero">
+    <div class="hub__greet">
+      <p class="hub__kicker">שָׁלוֹם פֶּלֶג!</p>
+      <h1 class="hub__title">פֶּלֶגֵ'ימְס</h1>
+      <p class="hub__sub">בַּחֲרִי מִשְׂחָק וְנַתְחִיל</p>
+    </div>
+    <pg-mascot mood="idle" [color]="color()" [hat]="hat()" [size]="120" />
+  </header>
+
+  <div class="hub__stats">
+    <a routerLink="/album" class="stat" aria-label="אַלְבּוֹם הַמַּדְבֵּקוֹת">
+      <pg-icon name="album" [size]="22" />
+      <span class="stat__value">{{ stickerCount() }}</span>
+      <span class="stat__label">מַדְבֵּקוֹת</span>
+    </a>
+    <span class="stat stat--plain">
+      <pg-icon name="star" [size]="22" />
+      <span class="stat__value">{{ totalStars() }}</span>
+      <span class="stat__label">כּוֹכָבִים</span>
+    </span>
+    <a routerLink="/shop" class="stat stat--coins" aria-label="חֲנוּת הַקִּשּׁוּטִים">
+      <pg-icon name="coin" [size]="22" />
+      <span class="stat__value">{{ coins() }}</span>
+      <span class="stat__label">חֲנוּת</span>
+    </a>
+    <button
+      type="button"
+      class="stat stat--plain"
+      [attr.aria-expanded]="settingsOpen()"
+      (click)="toggleSettings()"
+    >
+      <pg-icon name="gear" [size]="22" />
+      <span class="stat__label">הַגְדָּרוֹת</span>
+    </button>
+  </div>
+
+  @if (settingsOpen()) {
+    <div class="settings">
+      <button
+        type="button"
+        class="switch"
+        [class.switch--on]="soundOn()"
+        [attr.aria-pressed]="soundOn()"
+        (click)="toggle('soundOn')"
+      >
+        <pg-icon [name]="soundOn() ? 'volume' : 'volume-off'" [size]="22" />
+        צְלִילִים
+      </button>
+
+      @if (speechAvailable()) {
+        <button
+          type="button"
+          class="switch"
+          [class.switch--on]="speechOn()"
+          [attr.aria-pressed]="speechOn()"
+          (click)="toggle('speechOn')"
+        >
+          <pg-icon name="ear" [size]="22" />
+          הַקְרָאָה
+        </button>
+      }
+
+      <!-- Chill mode drops every clock, for a day when a timer is too much. -->
+      <button
+        type="button"
+        class="switch"
+        [class.switch--on]="chill()"
+        [attr.aria-pressed]="chill()"
+        (click)="toggle('chill')"
+      >
+        <pg-icon name="heart" [size]="22" />
+        בְּלִי לַחַץ זְמַן
+      </button>
+    </div>
+  }
+
+  <ul class="cards">
+    @for (game of games; track game.id) {
+      <li>
+        @if (game.route; as route) {
+          <a class="card" [class]="'card card--' + game.tint" [routerLink]="route">
+            <span class="card__icon"><pg-icon [name]="game.icon" [size]="30" /></span>
+            <span class="card__body">
+              <span class="card__title">{{ game.title }}</span>
+              <span class="card__blurb">{{ game.blurb }}</span>
+            </span>
+            <span class="card__go"><pg-icon name="play" [size]="22" /></span>
+          </a>
+        } @else {
+          <div class="card card--soon" [attr.aria-label]="game.title + ' — בְּקָרוֹב'">
+            <span class="card__icon"><pg-icon [name]="game.icon" [size]="30" /></span>
+            <span class="card__body">
+              <span class="card__title">{{ game.title }}</span>
+              <span class="card__blurb">{{ game.blurb }}</span>
+            </span>
+            <span class="card__soon">בְּקָרוֹב</span>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+</div>

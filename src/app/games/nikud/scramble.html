@@ -1,0 +1,62 @@
+<section class="deep">
+  <header class="deep__head">
+    <span class="deep__badge">
+      <pg-icon name="sparkle" [size]="20" />
+      סִבּוּב בּוֹנוּס
+    </span>
+    <h2 class="deep__title">סַדְּרִי אֶת הָאוֹתִיּוֹת</h2>
+    <p class="deep__clue">{{ word().meaning }}</p>
+  </header>
+
+  @if (!chill()) {
+    <div
+      class="clock"
+      [class.clock--low]="secondsLeft() <= 10"
+      role="timer"
+      [attr.aria-label]="'נוֹתְרוּ ' + secondsLeft() + ' שְׁנִיּוֹת'"
+    >
+      <div class="clock__bar" [style.inline-size.%]="(secondsLeft() / 45) * 100"></div>
+      <span class="clock__count">{{ secondsLeft() }}</span>
+    </div>
+  }
+
+  <div class="tiles" role="group" aria-label="אוֹתִיּוֹת לְסִדּוּר">
+    @for (letter of tiles(); track $index) {
+      <button
+        type="button"
+        class="tile"
+        [attr.data-tile]="$index"
+        [class.tile--picked]="picked() === $index"
+        [class.tile--locked]="finished()"
+        [attr.aria-label]="'הָאוֹת ' + letter + ' בְּמָקוֹם ' + ($index + 1)"
+        (pointerdown)="onTileDown($event)"
+        (pointermove)="onTileMove($event, $index)"
+        (pointerup)="onTileUp($event, $index)"
+        (pointercancel)="onTileCancel()"
+      >
+        {{ letter }}
+      </button>
+    }
+  </div>
+
+  @if (finished()) {
+    <p class="deep__result" [class.deep__result--win]="isSolved()">
+      @if (isSolved()) {
+        כָּל הַכָּבוֹד! הַמִּלָּה הִיא {{ word().word }}
+      } @else {
+        הַמִּלָּה הָיְתָה {{ word().word }}
+      }
+    </p>
+  } @else {
+    <button type="button" class="clay-btn clay-btn--ghost" (click)="skip()">
+      <pg-icon name="forward" [size]="20" />
+      דַּלְּגִי
+    </button>
+  }
+
+  @if (drag(); as d) {
+    <span class="tile-ghost" aria-hidden="true" [style.left.px]="d.x" [style.top.px]="d.y">{{
+      dragLetter()
+    }}</span>
+  }
+</section>

@@ -1,0 +1,37 @@
+<section class="memory">
+  <p class="memory__tally" aria-live="polite">
+    מָצָאת {{ foundPairs() }} מִתּוֹךְ {{ board().pairs }} זוּגוֹת
+  </p>
+
+  <div
+    class="grid"
+    [class.grid--wide]="board().pairs >= 8"
+    role="group"
+    aria-label="לוּחַ הַזִּכָּרוֹן"
+  >
+    @for (card of board().cards; track card.id) {
+      <button
+        type="button"
+        class="shell"
+        [class.shell--open]="isOpen(card)"
+        [class.shell--matched]="isMatched(card)"
+        [class.shell--wrong]="isWrong(card)"
+        [class.shell--clue]="card.face === 'clue'"
+        [disabled]="isMatched(card)"
+        [attr.aria-label]="isOpen(card) ? card.text : 'צְדָפָה סְגוּרָה'"
+        (click)="flip(card)"
+      >
+        @if (isOpen(card)) {
+          <span class="shell__text">{{ card.text }}</span>
+        } @else {
+          <span class="shell__back" aria-hidden="true"></span>
+        }
+      </button>
+    }
+  </div>
+
+  <button type="button" class="clay-btn clay-btn--ghost memory__hint" (click)="hint()">
+    <pg-icon name="bulb" [size]="22" />
+    רֶמֶז
+  </button>
+</section>

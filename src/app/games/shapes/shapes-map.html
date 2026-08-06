@@ -1,0 +1,27 @@
+<div class="map pg-shell">
+  <header class="map__head">
+    <a routerLink="/" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַמָּסָךְ הָרָאשִׁי">
+      <pg-icon name="back" [size]="22" />
+    </a>
+    <div class="map__title">
+      <h1>עוֹלַם הַצּוּרוֹת</h1>
+      <p>סוֹבְבִי אֶת הַצּוּרָה וְגַלִּי אוֹתָהּ</p>
+    </div>
+    <span class="wallet" [attr.aria-label]="'יֵשׁ לָךְ ' + coins() + ' מַטְבְּעוֹת'">
+      <pg-icon name="coin" [size]="22" />
+      {{ coins() }}
+    </span>
+  </header>
+
+  <p class="map__tally">
+    <pg-icon name="star" [size]="20" />
+    {{ totalStars() }} מִתּוֹךְ {{ maxStars }} כּוֹכָבִים
+  </p>
+
+  <div class="map__stream">
+    <pg-stream-map [nodes]="nodes()" routeBase="/shapes" />
+    <div class="stream__mascot">
+      <pg-mascot mood="idle" [color]="color()" [hat]="hat()" [size]="86" />
+    </div>
+  </div>
+</div>

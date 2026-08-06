@@ -1,0 +1,170 @@
+:host {
+  display: block;
+}
+
+/* Deep water instead of the bright brook — the bonus round should not look
+   like another turn of the main game. */
+.deep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 3.5vw, 26px);
+  padding: clamp(20px, 5vw, 36px) clamp(16px, 4vw, 32px);
+  border-radius: var(--pg-r-xl);
+  background:
+    radial-gradient(520px 300px at 20% 0%, rgba(103, 232, 249, 0.35), rgba(103, 232, 249, 0) 70%),
+    linear-gradient(165deg, #1e3a8a, #0c4a6e 55%, #082f49);
+  box-shadow: var(--clay-raised-lg);
+  color: #f0f9ff;
+  touch-action: manipulation;
+}
+
+.deep__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.deep__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(160deg, #fbbf24, #d97706);
+  color: #1f1300;
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.deep__title {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  color: #ffffff;
+}
+
+.deep__clue {
+  margin: 0;
+  /* sky-200 on the deep gradient clears 4.5:1 comfortably. */
+  color: #bae6fd;
+  font-size: clamp(0.95rem, 3.2vw, 1.1rem);
+}
+
+/* --- clock ---------------------------------------------------------------- */
+
+.clock {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: min(360px, 100%);
+  block-size: 34px;
+  border-radius: var(--pg-r-pill);
+  background: rgba(8, 47, 73, 0.75);
+  box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.clock__bar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: linear-gradient(90deg, #22d3ee, #67e8f9);
+  transition: inline-size 950ms linear;
+}
+
+.clock__count {
+  position: relative;
+  font-family: var(--pg-font-display);
+  font-weight: 700;
+  color: #082f49;
+}
+
+.clock--low .clock__bar {
+  background: linear-gradient(90deg, #fb923c, #fbbf24);
+}
+
+.clock--low .clock__count {
+  color: #ffffff;
+}
+
+/* --- tiles ---------------------------------------------------------------- */
+
+.tiles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(8px, 2.4vw, 14px);
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(58px, 16vw, 78px);
+  block-size: clamp(58px, 16vw, 78px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--pg-r-md);
+  background: linear-gradient(160deg, #fefce8, #fde68a);
+  box-shadow:
+    5px 5px 12px rgba(0, 0, 0, 0.35),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.7),
+    inset -3px -3px 6px rgba(180, 83, 9, 0.25);
+  font-family: var(--pg-font-nikud);
+  font-size: clamp(1.9rem, 6.5vw, 2.6rem);
+  font-weight: 700;
+  color: #422006;
+  cursor: grab;
+  touch-action: none;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.tile:hover:not(.tile--locked) {
+  filter: brightness(1.06);
+}
+
+.tile--picked {
+  box-shadow:
+    5px 5px 12px rgba(0, 0, 0, 0.35),
+    0 0 0 4px #22d3ee;
+}
+
+.tile--locked {
+  cursor: default;
+  filter: saturate(0.8);
+}
+
+.deep__result {
+  margin: 0;
+  font-family: var(--pg-font-display);
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  color: #bae6fd;
+}
+
+.deep__result--win {
+  color: #86efac;
+}
+
+.tile-ghost {
+  position: fixed;
+  z-index: var(--z-drag);
+  display: grid;
+  place-items: center;
+  inline-size: 70px;
+  block-size: 70px;
+  margin-inline-start: -35px;
+  margin-block-start: -42px;
+  border-radius: var(--pg-r-md);
+  background: linear-gradient(160deg, #fefce8, #fcd34d);
+  box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.45);
+  font-family: var(--pg-font-nikud);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #422006;
+  pointer-events: none;
+}

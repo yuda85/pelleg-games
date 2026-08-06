@@ -1,0 +1,117 @@
+<div class="play pg-shell">
+  <header class="play__bar">
+    <a routerLink="/math" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַמַּפָּה">
+      <pg-icon name="back" [size]="22" />
+    </a>
+    <span class="wallet" [attr.aria-label]="'יֵשׁ לָךְ ' + coins() + ' מַטְבְּעוֹת'">
+      <pg-icon name="coin" [size]="22" />
+      {{ coins() }}
+    </span>
+  </header>
+
+  <pg-pips
+    [total]="setSize"
+    [done]="scores().length"
+    [current]="scores().length"
+    [scores]="scores()"
+    [bonusDone]="phase() === 'summary'"
+  />
+
+  @if (streak() >= 3 && phase() !== 'summary') {
+    <p class="streak" role="status">
+      <pg-icon name="sparkle" [size]="20" />
+      רְצִיפוּת {{ streak() }} — מַטְבְּעוֹת כְּפוּלִים!
+    </p>
+  }
+
+  @switch (phase()) {
+    @case ('play') {
+      <div class="stage">
+        <pg-mascot [mood]="mood()" [color]="color()" [hat]="hat()" [size]="104" />
+        <pg-stones
+          [board]="board()"
+          [initialMistakes]="carriedMistakes()"
+          (solved)="onSolved($event)"
+        />
+      </div>
+    }
+
+    @case ('boss') {
+      <div class="stage">
+        <pg-mascot [mood]="mood()" [color]="color()" [hat]="hat()" [size]="104" />
+        <pg-keypad
+          [board]="board()"
+          (solved)="onSolved($event)"
+          (surrender)="onSurrender($event)"
+        />
+      </div>
+    }
+
+    @case ('reveal') {
+      <div class="reveal" role="status">
+        <pg-mascot [mood]="mood()" [color]="color()" [hat]="hat()" [size]="120" />
+        <p class="reveal__cheer">{{ cheer() }}</p>
+        <div class="stars" [attr.aria-label]="lastStars() + ' כּוֹכָבִים'">
+          @for (slot of starSlots; track slot) {
+            <span class="star" [class.star--on]="slot <= lastStars()" [style.--i]="slot">
+              <pg-icon name="star" [size]="40" [filled]="slot <= lastStars()" />
+            </span>
+          }
+        </div>
+        <button type="button" class="clay-btn clay-btn--go" (click)="next()">
+          הַלְאָה
+          <pg-icon name="forward" [size]="22" />
+        </button>
+      </div>
+    }
+
+    @case ('bonus') {
+      <pg-missing-number [boards]="run().bonus" [chill]="chill()" (done)="onBonusDone($event)" />
+    }
+
+    @case ('summary') {
+      <div class="summary">
+        <pg-mascot [mood]="mood()" [color]="color()" [hat]="hat()" [size]="140" />
+        <h2 class="summary__title">
+          {{ perfect() ? 'סִבּוּב מֻשְׁלָם!' : 'סִיַּמְתְּ אֶת הַסִּבּוּב!' }}
+        </h2>
+
+        <!-- dir=ltr on the numerals: in an RTL run, "14 / 21" reorders to
+             "21 / 14" and "+121" to "121+". -->
+        <dl class="summary__grid">
+          <div class="summary__cell">
+            <dt>כּוֹכָבִים</dt>
+            <dd dir="ltr">{{ runStars() }} / {{ setSize * 3 }}</dd>
+          </div>
+          <div class="summary__cell">
+            <dt>מַטְבְּעוֹת</dt>
+            <dd dir="ltr">+{{ runCoins() }}</dd>
+          </div>
+          <div class="summary__cell">
+            <dt>רְצִיפוּת שִׂיא</dt>
+            <dd dir="ltr">{{ bestStreak() }}</dd>
+          </div>
+        </dl>
+
+        <p class="summary__sticker">
+          זָכִיתְ בְּמַדְבֵּקָה חֲדָשָׁה — <strong>{{ sticker().name }}</strong>
+        </p>
+
+        <div class="summary__tools">
+          <button type="button" class="clay-btn clay-btn--ghost" (click)="replay()">
+            <pg-icon name="refresh" [size]="22" />
+            שׁוּב
+          </button>
+          @if (hasNextSet()) {
+            <button type="button" class="clay-btn clay-btn--go" (click)="nextSet()">
+              הַסִּבּוּב הַבָּא
+              <pg-icon name="play" [size]="20" />
+            </button>
+          } @else {
+            <a routerLink="/math" class="clay-btn clay-btn--primary">חֲזָרָה לַמַּפָּה</a>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

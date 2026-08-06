@@ -1,0 +1,27 @@
+<section class="stones">
+  <p class="prompt" dir="ltr">{{ prompt() }}</p>
+
+  <div class="stones__row" role="group" aria-label="אַבְנֵי הַתְּשׁוּבוֹת">
+    @for (stone of board().stones; track stone.value) {
+      <button
+        type="button"
+        class="stone"
+        [attr.data-value]="stone.value"
+        [class.stone--sunk]="isSunk(stone)"
+        [class.stone--landed]="landed() === stone.value"
+        [disabled]="isSunk(stone) || landed() !== null"
+        [attr.aria-label]="'הַתְּשׁוּבָה ' + stone.value"
+        (click)="choose(stone)"
+      >
+        <span dir="ltr">{{ stone.value }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="stones__water" aria-hidden="true"></div>
+
+  <button type="button" class="clay-btn clay-btn--ghost stones__hint" (click)="hint()">
+    <pg-icon name="bulb" [size]="22" />
+    רֶמֶז
+  </button>
+</section>

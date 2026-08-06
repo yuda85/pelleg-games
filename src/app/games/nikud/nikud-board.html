@@ -1,0 +1,125 @@
+<section class="board" [class.board--nudge]="needsNudge()">
+  <p class="board__clue">
+    <span class="board__clue-tag">רֶמֶז</span>
+    {{ puzzle().meaning }}
+  </p>
+
+  <!-- The word. Letters stay bare while solving; every mark lives in a socket. -->
+  <div class="word" [class.word--has-dots]="hasDotSlots()" role="group" aria-label="הַמִּלָּה">
+    @for (letter of puzzle().letters; track letter.index) {
+      <div class="letter">
+        @if (hasDotSlots()) {
+          @let dot = slotFor(letter.index, 'dot');
+          <div class="letter__above">
+            @if (dot) {
+              <button
+                type="button"
+                class="socket socket--dot"
+                [attr.data-slot-id]="dot.id"
+                [class.socket--filled]="placedMark(dot)"
+                [class.socket--hint]="hinted() === dot.id"
+                [class.socket--reject]="rejected() === dot.id"
+                [attr.aria-label]="
+                  placedMark(dot)
+                    ? 'הָסֵר ' + markName(placedMark(dot)!)
+                    : 'מָקוֹם לַנְּקֻדָּה מֵעַל הָאוֹת ' + letter.base
+                "
+                (click)="onSlotClick(dot)"
+              >
+                @if (placedMark(dot); as mark) {
+                  <pg-nikud-glyph [mark]="mark" [ring]="false" [size]="40" />
+                } @else {
+                  <span class="socket__hole" aria-hidden="true"></span>
+                }
+              </button>
+            }
+          </div>
+        }
+
+        <div class="letter__glyph">{{ letterText(letter.index) }}</div>
+
+        @let vowel = slotFor(letter.index, 'vowel');
+        <div class="letter__below">
+          @if (vowel) {
+            <button
+              type="button"
+              class="socket"
+              [attr.data-slot-id]="vowel.id"
+              [class.socket--filled]="placedMark(vowel)"
+              [class.socket--hint]="hinted() === vowel.id"
+              [class.socket--reject]="rejected() === vowel.id"
+              [attr.aria-label]="
+                placedMark(vowel)
+                  ? 'הָסֵר ' + markName(placedMark(vowel)!)
+                  : 'מָקוֹם לְנִקּוּד תַּחַת הָאוֹת ' + letter.base
+              "
+              (click)="onSlotClick(vowel)"
+            >
+              @if (placedMark(vowel); as mark) {
+                <pg-nikud-glyph [mark]="mark" [ring]="false" [size]="44" />
+              } @else {
+                <span class="socket__hole" aria-hidden="true"></span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Tray of droplets. Used ones stay in place so the layout never shifts. -->
+  <div class="tray" role="group" aria-label="טִפּוֹת הַנִּקּוּד">
+    @for (chip of tray(); track chip.id) {
+      <button
+        type="button"
+        class="chip"
+        [class.chip--used]="isChipUsed(chip)"
+        [class.chip--picked]="selectedChip() === chip.id && !isChipUsed(chip)"
+        [class.chip--hint]="hintedChipMark() === chip.mark && !isChipUsed(chip)"
+        [class.chip--dot]="chip.kind === 'dot'"
+        [disabled]="isChipUsed(chip)"
+        [attr.aria-label]="markName(chip.mark)"
+        (pointerdown)="onChipDown($event, chip)"
+        (pointermove)="onChipMove($event, chip)"
+        (pointerup)="onChipUp($event, chip)"
+        (pointercancel)="onChipCancel()"
+      >
+        <pg-nikud-glyph class="chip__mark" [mark]="chip.mark" [size]="52" />
+        <span class="chip__name">{{ markName(chip.mark) }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="board__tools">
+    @if (canListen()) {
+      <button type="button" class="clay-btn clay-btn--ghost" (click)="listen.emit()">
+        <pg-icon name="ear" [size]="22" />
+        הַקְשִׁיבִי
+      </button>
+    }
+    <button
+      type="button"
+      class="clay-btn clay-btn--ghost"
+      [class.board__hint--calling]="needsNudge()"
+      (click)="showHint()"
+    >
+      <pg-icon name="bulb" [size]="22" />
+      רֶמֶז
+    </button>
+  </div>
+
+  <!-- Follows the finger during a drag; never intercepts the drop hit-test. -->
+  @if (drag(); as d) {
+    @if (dragChip(); as chip) {
+      <span
+        class="ghost"
+        aria-hidden="true"
+        [style.left.px]="d.x"
+        [style.top.px]="d.y"
+        [class.ghost--dot]="chip.kind === 'dot'"
+      >
+        <pg-nikud-glyph [mark]="chip.mark" [size]="52" />
+      </span>
+    }
+  }
+</section>

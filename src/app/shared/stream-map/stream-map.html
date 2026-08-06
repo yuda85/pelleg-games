@@ -1,0 +1,48 @@
+<div class="stream" [style.--rows]="placed().length">
+  <!-- preserveAspectRatio=none lets the 0-100 space stretch with the box;
+       non-scaling-stroke keeps the water from stretching with it. -->
+  <svg class="stream__svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <path class="stream__bed" [attr.d]="stream()" vector-effect="non-scaling-stroke" />
+    <path class="stream__water" [attr.d]="stream()" vector-effect="non-scaling-stroke" />
+  </svg>
+
+  <ol class="stream__nodes">
+    @for (node of placed(); track node.index) {
+      <!-- Physical left/top on purpose: the SVG stream underneath uses physical
+           coordinates, and inset-inline-start would flip in RTL while the path
+           would not. -->
+      <li class="node" [style.left.%]="node.x" [style.top.%]="node.y">
+        @if (node.unlocked) {
+          <a
+            class="node__btn"
+            [class.node__btn--done]="node.stars === node.maxStars"
+            [class.node__btn--next]="node.isNext"
+            [routerLink]="[routeBase(), node.index]"
+            [attr.aria-label]="
+              'סִבּוּב ' +
+              (node.index + 1) +
+              ', ' +
+              node.stars +
+              ' מִתּוֹךְ ' +
+              node.maxStars +
+              ' כּוֹכָבִים'
+            "
+          >
+            <span class="node__num" dir="ltr">{{ node.index + 1 }}</span>
+            <span class="node__stars" aria-hidden="true">
+              <pg-icon name="star" [size]="14" />
+              {{ node.stars }}
+            </span>
+          </a>
+        } @else {
+          <span
+            class="node__btn node__btn--locked"
+            [attr.aria-label]="'סִבּוּב ' + (node.index + 1) + ' עֲדַיִן נָעוּל'"
+          >
+            <pg-icon name="lock" [size]="26" />
+          </span>
+        }
+      </li>
+    }
+  </ol>
+</div>

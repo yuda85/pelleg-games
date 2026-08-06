@@ -1,0 +1,102 @@
+:host {
+  display: block;
+}
+
+/* Deep water, matching the other games' bonus rounds. */
+.deep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 3.5vw, 26px);
+  padding: clamp(20px, 5vw, 36px) clamp(16px, 4vw, 32px);
+  border-radius: var(--pg-r-xl);
+  background:
+    radial-gradient(520px 300px at 20% 0%, rgba(103, 232, 249, 0.35), rgba(103, 232, 249, 0) 70%),
+    linear-gradient(165deg, #1e3a8a, #0c4a6e 55%, #082f49);
+  box-shadow: var(--clay-raised-lg);
+  color: #f0f9ff;
+}
+
+.deep__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.deep__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(160deg, #fbbf24, #d97706);
+  color: #1f1300;
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.deep__title {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  color: #ffffff;
+}
+
+.deep__count,
+.deep__hint {
+  margin: 0;
+  /* sky-200 on the deep gradient clears 4.5:1. */
+  color: #bae6fd;
+  font-size: clamp(0.95rem, 3.2vw, 1.1rem);
+}
+
+.deep__verdict {
+  margin: 0;
+  font-family: var(--pg-font-display);
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+  font-weight: 600;
+  color: #fca5a5;
+}
+
+.deep__verdict--right {
+  color: #86efac;
+}
+
+.bins {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(10px, 2.6vw, 16px);
+}
+
+.bin {
+  min-block-size: 58px;
+  padding: 14px 30px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(160deg, #fefce8, #fde68a);
+  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.32);
+  font-family: var(--pg-font-display);
+  font-size: clamp(1rem, 4vw, 1.3rem);
+  font-weight: 700;
+  color: #422006;
+  cursor: pointer;
+  transition: filter var(--pg-t) var(--pg-ease-out);
+}
+
+.bin:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.bin--picked {
+  box-shadow:
+    5px 5px 12px rgba(0, 0, 0, 0.32),
+    0 0 0 4px #22d3ee;
+}
+
+/* The right bin lights up once she commits, however she answered. */
+.bin--answer {
+  background: linear-gradient(160deg, #bbf7d0, #4ade80);
+  color: #052e16;
+}

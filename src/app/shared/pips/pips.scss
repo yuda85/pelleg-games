@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+.pips {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 8px 14px;
+  list-style: none;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-sunk);
+}
+
+.pip {
+  display: grid;
+  place-items: center;
+  inline-size: 26px;
+  block-size: 26px;
+  border-radius: 50%;
+  background: var(--pg-surface-sunk);
+  box-shadow: inset 2px 2px 4px rgba(79, 70, 229, 0.16);
+  font-family: var(--pg-font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--pg-ink-soft);
+}
+
+.pip--done {
+  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  color: var(--pg-on-color);
+  box-shadow: none;
+}
+
+.pip--now {
+  background: var(--pg-surface);
+  box-shadow: 0 0 0 3px var(--pg-primary);
+}
+
+.pip--bonus {
+  color: var(--pg-warn);
+}
+
+.pip--bonus.pip--done {
+  background: linear-gradient(160deg, #fbbf24, var(--pg-gold));
+  color: #1f1300;
+}

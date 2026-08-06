@@ -1,0 +1,29 @@
+<section class="ask">
+  <p class="ask__prompt">{{ question().prompt }}</p>
+
+  <pg-solid-view
+    [kind]="question().solid.id"
+    [fallbackName]="question().solid.name"
+    [label]="'צוּרָה לְבִדִּיקָה'"
+  />
+
+  <div class="ask__choices" role="group" aria-label="תְּשׁוּבוֹת">
+    @for (choice of question().choices; track choice) {
+      <button
+        type="button"
+        class="choice"
+        [class.choice--out]="isOut(choice)"
+        [class.choice--won]="done() && choice === question().answer"
+        [disabled]="isOut(choice) || done()"
+        (click)="choose(choice)"
+      >
+        {{ choice }}
+      </button>
+    }
+  </div>
+
+  <button type="button" class="clay-btn clay-btn--ghost ask__hint" (click)="hint()">
+    <pg-icon name="bulb" [size]="22" />
+    רֶמֶז
+  </button>
+</section>

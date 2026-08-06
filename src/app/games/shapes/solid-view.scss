@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: min(340px, 82vw);
+  aspect-ratio: 1;
+  border-radius: var(--pg-r-xl);
+  background: radial-gradient(circle at 50% 35%, #ffffff, #dbeafe 70%);
+  box-shadow: var(--clay-sunk);
+  overflow: hidden;
+  /* The camera takes the drag; the page must not scroll under her finger. */
+  touch-action: none;
+}
+
+.stage__canvas {
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+  outline: none;
+}
+
+.stage--failed .stage__canvas {
+  display: none;
+}
+
+.stage__fallback {
+  margin: 0;
+  font-family: var(--pg-font-nikud);
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
+  font-weight: 700;
+  color: var(--pg-primary);
+}
+
+.stage__spin {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--pg-ink-soft);
+}

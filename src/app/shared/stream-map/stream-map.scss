@@ -1,0 +1,106 @@
+:host {
+  display: block;
+}
+
+.stream {
+  position: relative;
+  inline-size: 100%;
+  /* Height grows with the number of sets, so the map scales with the game. */
+  block-size: calc(var(--rows) * 128px);
+}
+
+.stream__svg {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.stream__bed {
+  fill: none;
+  stroke: #bcd3ea;
+  stroke-width: 28;
+  stroke-linecap: round;
+}
+
+.stream__water {
+  fill: none;
+  stroke: var(--pg-aqua-soft);
+  stroke-width: 18;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.stream__nodes {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.node__btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 74px;
+  block-size: 74px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-primary);
+  font-family: var(--pg-font-display);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.node__btn:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.node__num {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.node__stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pg-gold);
+}
+
+.node__btn--done {
+  background: linear-gradient(160deg, #bbf7d0, #4ade80);
+  color: #052e16;
+}
+
+.node__btn--done .node__stars {
+  color: #713f12;
+}
+
+/* The next stone to step on gets a ring, not a wobble. */
+.node__btn--next {
+  box-shadow:
+    var(--clay-raised),
+    0 0 0 5px rgba(14, 116, 144, 0.45);
+}
+
+.node__btn--locked {
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  color: #94a3b8;
+  cursor: not-allowed;
+}

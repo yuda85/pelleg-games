@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  min-block-size: 100%;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* Off-screen until tabbed to — the first stop for a keyboard user. */
+.skip {
+  position: absolute;
+  inset-block-start: -100px;
+  inset-inline-start: 12px;
+  z-index: var(--z-toast);
+  padding: 12px 22px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-primary);
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  text-decoration: none;
+  transition: inset-block-start var(--pg-t) var(--pg-ease-out);
+}
+
+.skip:focus {
+  inset-block-start: 12px;
+}

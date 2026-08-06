@@ -1,0 +1,31 @@
+<section class="deep">
+  <header class="deep__head">
+    <span class="deep__badge">
+      <pg-icon name="sparkle" [size]="20" />
+      סִבּוּב בּוֹנוּס
+    </span>
+    <h2 class="deep__title">אֵיזֶה מִסְפָּר חָסֵר?</h2>
+    <p class="deep__count">שְׁאֵלָה {{ index() + 1 }} מִתּוֹךְ {{ total() }}</p>
+  </header>
+
+  @if (!chill()) {
+    <div
+      class="clock"
+      [class.clock--low]="secondsLeft() <= 10"
+      role="timer"
+      [attr.aria-label]="'נוֹתְרוּ ' + secondsLeft() + ' שְׁנִיּוֹת'"
+    >
+      <div class="clock__bar" [style.inline-size.%]="(secondsLeft() / roundSeconds) * 100"></div>
+      <span class="clock__count" dir="ltr">{{ secondsLeft() }}</span>
+    </div>
+  }
+
+  @if (!finished()) {
+    <pg-stones [board]="current()" (solved)="onSolved($event)" />
+
+    <button type="button" class="clay-btn clay-btn--ghost" (click)="skip()">
+      <pg-icon name="forward" [size]="20" />
+      דַּלְּגִי
+    </button>
+  }
+</section>

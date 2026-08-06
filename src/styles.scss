@@ -1,0 +1,262 @@
+@use './fonts';
+
+/* ==========================================================================
+   Pelegames — global design system
+   Style: Claymorphism (soft 3D, chunky, toy-like) — matched to kids/education.
+   Theme: "פֶּלֶג" = brook. Water, droplets, aqua. Nikud marks are droplets.
+   Light mode only by design: dark mode is a claymorphism anti-pattern.
+   ========================================================================== */
+
+:root {
+  /* --- Color ------------------------------------------------------------ */
+  --pg-bg: #eef6ff;
+  --pg-surface: #ffffff;
+  --pg-surface-sunk: #e8effb;
+
+  --pg-primary: #4f46e5; /* indigo — structure, headings */
+  --pg-primary-soft: #a5b4fc;
+  --pg-aqua: #0e7490; /* brook — the app's signature */
+  --pg-aqua-soft: #67e8f9;
+  --pg-success: #15803d;
+  --pg-success-soft: #86efac;
+  --pg-warn: #b45309;
+  --pg-danger: #be123c;
+  --pg-gold: #d97706;
+
+  /* Text — all >= 4.5:1 on --pg-bg and --pg-surface */
+  --pg-ink: #1e1b4b;
+  --pg-ink-soft: #475569;
+  --pg-on-color: #ffffff;
+
+  /* --- Type ------------------------------------------------------------- */
+  --pg-font-display: 'Fredoka', 'Rubik', system-ui, sans-serif;
+  --pg-font-body: 'Rubik', system-ui, sans-serif;
+  /* Noto Sans Hebrew carries a complete nikud set — used wherever a
+     vocalized word renders as real combining marks. */
+  --pg-font-nikud: 'Noto Sans Hebrew', 'Rubik', system-ui, sans-serif;
+
+  /* --- Radius ----------------------------------------------------------- */
+  --pg-r-sm: 12px;
+  --pg-r-md: 18px;
+  --pg-r-lg: 26px;
+  --pg-r-xl: 34px;
+  --pg-r-pill: 999px;
+
+  /* --- Clay recipes ----------------------------------------------------- */
+  --clay-raised:
+    7px 7px 15px rgba(79, 70, 229, 0.16), -5px -5px 12px rgba(255, 255, 255, 0.95),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -3px -3px 7px rgba(79, 70, 229, 0.1);
+  --clay-raised-lg:
+    12px 12px 26px rgba(79, 70, 229, 0.2), -8px -8px 20px rgba(255, 255, 255, 0.95),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.8), inset -4px -4px 10px rgba(79, 70, 229, 0.12);
+  --clay-pressed:
+    inset 5px 5px 11px rgba(79, 70, 229, 0.22), inset -4px -4px 9px rgba(255, 255, 255, 0.9);
+  --clay-sunk:
+    inset 4px 4px 9px rgba(79, 70, 229, 0.14), inset -3px -3px 7px rgba(255, 255, 255, 0.9);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --pg-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --pg-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --pg-t-fast: 150ms;
+  --pg-t: 220ms;
+
+  /* --- Z-index scale ---------------------------------------------------- */
+  --z-sticky: 10;
+  --z-overlay: 20;
+  --z-modal: 30;
+  --z-drag: 50;
+  --z-toast: 60;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--pg-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--pg-ink);
+  background:
+    radial-gradient(1100px 620px at 90% -10%, #ffffff 0%, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(900px 520px at 0% 100%, #cffafe 0%, rgba(207, 250, 254, 0) 62%), var(--pg-bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* ==========================================================================
+   Clay primitives — shared across every screen
+   ========================================================================== */
+
+.clay {
+  background: var(--pg-surface);
+  border-radius: var(--pg-r-lg);
+  box-shadow: var(--clay-raised);
+}
+
+.clay-btn {
+  --btn-bg: var(--pg-surface);
+  --btn-fg: var(--pg-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* Touch-target floor: 52px, comfortably above the 44px minimum. */
+  min-height: 52px;
+  min-width: 52px;
+  padding: 12px 26px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--pg-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--clay-raised);
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+/* Hover changes light, never size — a scale() here would shift siblings. */
+.clay-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.clay-btn:active {
+  box-shadow: var(--clay-pressed);
+  filter: brightness(0.98);
+}
+
+.clay-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: var(--clay-sunk);
+}
+
+.clay-btn--primary {
+  --btn-bg: linear-gradient(160deg, #6366f1, var(--pg-primary));
+  --btn-fg: var(--pg-on-color);
+}
+
+.clay-btn--aqua {
+  --btn-bg: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  --btn-fg: var(--pg-on-color);
+}
+
+.clay-btn--go {
+  --btn-bg: linear-gradient(160deg, #16a34a, var(--pg-success));
+  --btn-fg: var(--pg-on-color);
+}
+
+.clay-btn--ghost {
+  box-shadow: var(--clay-sunk);
+  background: var(--pg-surface-sunk);
+}
+
+/* Keyboard focus stays obvious against every button variant. */
+:focus-visible {
+  outline: 4px solid var(--pg-aqua);
+  outline-offset: 3px;
+  border-radius: var(--pg-r-sm);
+}
+
+.pg-shell {
+  width: min(1100px, 100%);
+  margin-inline: auto;
+  padding-inline: clamp(14px, 4vw, 28px);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Motion — one shared keyframe set, gated on prefers-reduced-motion
+   ========================================================================== */
+
+@keyframes pg-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pg-wiggle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px);
+  }
+  40% {
+    transform: translateX(7px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes pg-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

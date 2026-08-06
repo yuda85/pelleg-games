@@ -1,0 +1,268 @@
+:host {
+  display: block;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 3vw, 24px);
+  touch-action: manipulation;
+}
+
+.board__clue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 20px 10px 12px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-sunk);
+  font-size: clamp(1rem, 3.4vw, 1.2rem);
+  color: var(--pg-ink-soft);
+}
+
+.board__clue-tag {
+  padding: 3px 14px;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  color: var(--pg-on-color);
+  font-family: var(--pg-font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* --- the word ------------------------------------------------------------ */
+
+.word {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: clamp(6px, 2vw, 14px);
+  padding: clamp(12px, 3vw, 22px) clamp(14px, 4vw, 30px);
+  border-radius: var(--pg-r-xl);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.letter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Reserved across the whole row so an unmarked letter doesn't shorten it. */
+.letter__above,
+.letter__below {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+}
+
+.letter__glyph {
+  font-family: var(--pg-font-nikud);
+  font-size: clamp(2.6rem, 11vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--pg-ink);
+  padding-inline: 4px;
+}
+
+/* --- sockets ------------------------------------------------------------- */
+
+.socket {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* 54px keeps the drop target above the 44px minimum even on a phone. */
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  cursor: pointer;
+  transition:
+    background var(--pg-t) var(--pg-ease-out),
+    box-shadow var(--pg-t) var(--pg-ease-out);
+}
+
+.socket:hover {
+  background: #dde7f8;
+}
+
+.socket__hole {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px dashed var(--pg-primary-soft);
+}
+
+.socket pg-nikud-glyph {
+  color: var(--pg-aqua);
+  animation: pg-pop 260ms var(--pg-ease-bounce);
+}
+
+.socket--dot pg-nikud-glyph {
+  color: var(--pg-warn);
+}
+
+.socket--filled {
+  background: linear-gradient(160deg, #ecfeff, #cffafe);
+  box-shadow:
+    var(--clay-sunk),
+    0 0 0 3px rgba(14, 116, 144, 0.35);
+}
+
+.socket--hint {
+  animation: socket-hint 1.1s ease-in-out infinite;
+}
+
+.socket--reject {
+  animation: pg-wiggle 420ms ease-out;
+}
+
+@keyframes socket-hint {
+  0%,
+  100% {
+    box-shadow: var(--clay-sunk);
+  }
+  50% {
+    box-shadow:
+      var(--clay-sunk),
+      0 0 0 6px rgba(217, 119, 6, 0.4);
+  }
+}
+
+/* --- tray ---------------------------------------------------------------- */
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* >= 8px between adjacent touch targets. */
+  gap: clamp(10px, 2.6vw, 16px);
+  max-width: 620px;
+}
+
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 74px;
+  height: 82px;
+  padding: 0;
+  border: 0;
+  /* Droplet silhouette — the same shape as the mascot. */
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  box-shadow: var(--clay-raised);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out),
+    opacity var(--pg-t) var(--pg-ease-out);
+}
+
+.chip:hover:not(:disabled) {
+  filter: brightness(1.04);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.chip:active:not(:disabled) {
+  cursor: grabbing;
+}
+
+.chip__mark {
+  color: var(--pg-primary);
+}
+
+.chip__name {
+  font-family: var(--pg-font-display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--pg-ink-soft);
+}
+
+.chip--dot {
+  background: linear-gradient(160deg, #fffbeb, #fde68a);
+}
+
+.chip--dot .chip__mark {
+  color: var(--pg-warn);
+}
+
+/* Picked chips stay put and change light — moving them would shift the tray. */
+.chip--picked {
+  box-shadow:
+    var(--clay-raised-lg),
+    0 0 0 4px var(--pg-aqua);
+}
+
+.chip--hint {
+  box-shadow:
+    var(--clay-raised),
+    0 0 0 4px rgba(217, 119, 6, 0.55);
+}
+
+.chip--used {
+  opacity: 0.28;
+  box-shadow: var(--clay-sunk);
+  cursor: default;
+}
+
+/* --- tools --------------------------------------------------------------- */
+
+.board__tools {
+  display: flex;
+  gap: 12px;
+}
+
+.board__hint--calling {
+  animation: hint-call 1.6s ease-in-out infinite;
+}
+
+@keyframes hint-call {
+  0%,
+  100% {
+    box-shadow: var(--clay-sunk);
+  }
+  50% {
+    box-shadow:
+      var(--clay-sunk),
+      0 0 0 5px rgba(217, 119, 6, 0.35);
+  }
+}
+
+/* --- drag ghost ---------------------------------------------------------- */
+
+.ghost {
+  position: fixed;
+  z-index: var(--z-drag);
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 78px;
+  margin-inline-start: -35px;
+  margin-block-start: -46px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: linear-gradient(160deg, #ffffff, #cffafe);
+  box-shadow: var(--clay-raised-lg);
+  color: var(--pg-primary);
+  /* Must not swallow the elementFromPoint hit-test under the finger. */
+  pointer-events: none;
+}
+
+.ghost--dot {
+  background: linear-gradient(160deg, #fffbeb, #fde68a);
+  color: var(--pg-warn);
+}

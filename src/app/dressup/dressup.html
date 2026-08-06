@@ -1,0 +1,70 @@
+<div class="dress pg-shell">
+  <header class="dress__head">
+    <a routerLink="/" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַמָּסָךְ הָרָאשִׁי">
+      <pg-icon name="back" [size]="22" />
+    </a>
+    <h1>חֲדַר הַהַלְבָּשָׁה</h1>
+    <span class="wallet" [attr.aria-label]="'יֵשׁ לָךְ ' + coins() + ' מַטְבְּעוֹת'">
+      <pg-icon name="coin" [size]="22" />
+      {{ coins() }}
+    </span>
+  </header>
+
+  <div class="dress__stage">
+    <pg-doll
+      [outfit]="worn().outfit"
+      [hair]="worn().hair"
+      [shoes]="worn().shoes"
+      [extra]="worn().extra"
+      [width]="230"
+    />
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="מַדָּפֵי הָאָרוֹן">
+    @for (slot of slots; track slot.id) {
+      <button
+        type="button"
+        class="tab"
+        role="tab"
+        [class.tab--on]="openSlot() === slot.id"
+        [attr.aria-selected]="openSlot() === slot.id"
+        (click)="openSlot.set(slot.id)"
+      >
+        {{ slot.name }}
+      </button>
+    }
+  </nav>
+
+  <ul class="rack">
+    @for (item of rack(); track item.id) {
+      <li>
+        <button
+          type="button"
+          class="item"
+          [class.item--worn]="isWorn(item)"
+          [class.item--denied]="denied() === item.id"
+          (click)="pick(item)"
+        >
+          <span class="item__swatch" [style.background]="item.swatch" aria-hidden="true"></span>
+          <span class="item__name">{{ item.name }}</span>
+          @if (isWorn(item)) {
+            <span class="item__tag item__tag--worn"
+              ><pg-icon name="check" [size]="16" /> לָבוּשׁ</span
+            >
+          } @else if (owns(item)) {
+            <span class="item__tag">לִלְבּוֹשׁ</span>
+          } @else {
+            <span class="item__tag item__tag--price">
+              <pg-icon name="coin" [size]="16" />
+              {{ item.price }}
+            </span>
+          }
+        </button>
+
+        @if (denied() === item.id) {
+          <p class="denied" role="status">עוֹד קְצָת מַטְבְּעוֹת וְזֶה שֶׁלָּךְ!</p>
+        }
+      </li>
+    }
+  </ul>
+</div>

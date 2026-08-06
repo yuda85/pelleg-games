@@ -1,0 +1,46 @@
+<div class="album pg-shell">
+  <header class="album__head">
+    <a routerLink="/" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַמָּסָךְ הָרָאשִׁי">
+      <pg-icon name="back" [size]="22" />
+    </a>
+    <h1>אַלְבּוֹם הַמַּדְבֵּקוֹת</h1>
+    <span class="tally" dir="ltr">{{ count() }} / {{ total }}</span>
+  </header>
+
+  @for (group of groups(); track group.title) {
+    <section class="album__group">
+      <h2 class="album__group-title">{{ group.title }}</h2>
+      <ul class="sheet">
+        @for (slot of group.slots; track slot.id) {
+          <li
+            class="slot"
+            [class.slot--locked]="!slot.unlocked"
+            [attr.aria-label]="
+              slot.unlocked
+                ? 'מַדְבֵּקַת ' + slot.name
+                : 'מַדְבֵּקַת ' +
+                  slot.name +
+                  ' — נִפְתַּחַת בְּסִיּוּם סִבּוּב ' +
+                  (slot.setIndex + 1)
+            "
+          >
+            <pg-sticker-art [name]="slot.id" />
+            <span class="slot__name">{{ slot.name }}</span>
+            @if (!slot.unlocked) {
+              <span class="slot__hint">
+                <pg-icon name="lock" [size]="14" />
+                סִבּוּב {{ slot.setIndex + 1 }}
+              </span>
+            }
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (count() === 0) {
+    <p class="album__empty">
+      סַיְּמִי סִבּוּב בְּנַחַל הַנִּקּוּד וְהַמַּדְבֵּקָה הָרִאשׁוֹנָה שֶׁלָּךְ תַּגִּיעַ.
+    </p>
+  }
+</div>

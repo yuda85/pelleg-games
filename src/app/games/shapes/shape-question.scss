@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+.ask {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 2.6vw, 18px);
+}
+
+.ask__prompt {
+  margin: 0;
+  padding: 12px 24px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-display);
+  font-size: clamp(1.05rem, 4vw, 1.4rem);
+  font-weight: 600;
+  color: var(--pg-primary);
+  text-align: center;
+}
+
+.ask__choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(9px, 2.4vw, 14px);
+}
+
+.choice {
+  min-inline-size: 84px;
+  min-block-size: 56px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-nikud);
+  font-size: clamp(1.05rem, 4.2vw, 1.35rem);
+  font-weight: 700;
+  color: var(--pg-ink);
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out),
+    opacity var(--pg-t) var(--pg-ease-out);
+}
+
+.choice:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: var(--clay-raised-lg);
+}
+
+/* Ruled out, not hidden — seeing what is already gone is half the counting. */
+.choice--out {
+  opacity: 0.32;
+  box-shadow: var(--clay-sunk);
+  cursor: default;
+  text-decoration: line-through;
+}
+
+.choice--won {
+  background: linear-gradient(160deg, #bbf7d0, #4ade80);
+  color: #052e16;
+  animation: pg-pop 300ms var(--pg-ease-bounce);
+}

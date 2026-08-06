@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.memory {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 3vw, 20px);
+}
+
+.memory__tally {
+  margin: 0;
+  padding: 8px 20px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-sunk);
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  color: var(--pg-ink-soft);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(7px, 2vw, 12px);
+  inline-size: min(560px, 100%);
+}
+
+/* Ten pairs need a fifth column or the grid runs off a phone screen. */
+.grid--wide {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.shell {
+  display: grid;
+  place-items: center;
+  /* Square-ish cards, sized by the column so the grid always fits. */
+  aspect-ratio: 1;
+  min-block-size: 56px;
+  padding: 4px;
+  border: 0;
+  /* A shell: rounded at the top, hinged along the bottom. */
+  border-radius: 46% 46% 18% 18% / 55% 55% 20% 20%;
+  background: linear-gradient(160deg, #fce7f3, #f9a8d4);
+  box-shadow: var(--clay-raised);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    background var(--pg-t) var(--pg-ease-out),
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.shell:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: var(--clay-raised-lg);
+}
+
+/* Ridges, so a closed shell reads as a shell rather than a blank tile. */
+.shell__back {
+  inline-size: 62%;
+  block-size: 62%;
+  background:
+    radial-gradient(circle at 50% 100%, rgba(190, 24, 93, 0.45) 1px, transparent 1.6px) 0 0 / 100%
+      100%,
+    conic-gradient(
+      from 200deg at 50% 100%,
+      rgba(190, 24, 93, 0.28) 0 6deg,
+      transparent 6deg 14deg,
+      rgba(190, 24, 93, 0.28) 14deg 20deg,
+      transparent 20deg 28deg,
+      rgba(190, 24, 93, 0.28) 28deg 34deg,
+      transparent 34deg 40deg
+    );
+}
+
+.shell--open {
+  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  border-radius: var(--pg-r-md);
+  box-shadow: var(--clay-sunk);
+  animation: pg-pop 220ms var(--pg-ease-out);
+}
+
+.shell__text {
+  font-family: var(--pg-font-nikud);
+  font-size: clamp(0.95rem, 3.6vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--pg-ink);
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Clue faces are whole phrases, so they need room the single words don't. */
+.shell--clue .shell__text {
+  font-family: var(--pg-font-body);
+  font-size: clamp(0.62rem, 2.3vw, 0.85rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--pg-ink-soft);
+}
+
+.shell--matched {
+  background: linear-gradient(160deg, #bbf7d0, #4ade80);
+  cursor: default;
+}
+
+.shell--matched .shell__text {
+  color: #052e16;
+}
+
+.shell--wrong {
+  animation: pg-wiggle 420ms ease-out;
+}
+
+@media (max-width: 380px) {
+  .grid--wide {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

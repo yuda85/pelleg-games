@@ -1,0 +1,110 @@
+<div class="shop pg-shell">
+  <header class="shop__head">
+    <a routerLink="/" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַמָּסָךְ הָרָאשִׁי">
+      <pg-icon name="back" [size]="22" />
+    </a>
+    <h1>הַחֲנוּת שֶׁל טִפִּי</h1>
+    <span class="wallet" [attr.aria-label]="'יֵשׁ לָךְ ' + coins() + ' מַטְבְּעוֹת'">
+      <pg-icon name="coin" [size]="22" />
+      {{ coins() }}
+    </span>
+  </header>
+
+  <div class="preview">
+    <pg-mascot mood="happy" [color]="shownColor()" [hat]="shownHat()" [size]="150" />
+    @if (hat()) {
+      <button type="button" class="clay-btn clay-btn--ghost" (click)="removeHat()">
+        <pg-icon name="x" [size]="20" />
+        בְּלִי כּוֹבַע
+      </button>
+    }
+  </div>
+
+  <section class="rack">
+    <h2 class="rack__title">צְבָעִים</h2>
+    <ul class="grid">
+      @for (item of colors; track item.id) {
+        <li>
+          <button
+            type="button"
+            class="item"
+            [class.item--owned]="owns(item.id)"
+            [class.item--worn]="color() === item.id"
+            [class.item--denied]="denied() === item.id"
+            (click)="pickColor(item.id, item.price)"
+            (pointerenter)="previewColor.set(item.id)"
+            (pointerleave)="previewColor.set(null)"
+            (focus)="previewColor.set(item.id)"
+            (blur)="previewColor.set(null)"
+          >
+            <span
+              class="swatch"
+              [style.background]="'linear-gradient(160deg,' + item.from + ',' + item.to + ')'"
+              aria-hidden="true"
+            ></span>
+            <span class="item__name">{{ item.name }}</span>
+            @if (color() === item.id) {
+              <span class="item__tag item__tag--worn"
+                ><pg-icon name="check" [size]="16" /> לָבוּשׁ</span
+              >
+            } @else if (owns(item.id)) {
+              <span class="item__tag">בְּחָרִי</span>
+            } @else {
+              <span class="item__tag item__tag--price">
+                <pg-icon name="coin" [size]="16" />
+                {{ item.price }}
+              </span>
+            }
+          </button>
+
+          @if (denied() === item.id) {
+            <p class="denied" role="status">עוֹד קְצָת מַטְבְּעוֹת וְזֶה שֶׁלָּךְ!</p>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="rack">
+    <h2 class="rack__title">כּוֹבָעִים</h2>
+    <ul class="grid">
+      @for (item of hats; track item.id) {
+        <li>
+          <button
+            type="button"
+            class="item"
+            [class.item--owned]="owns(item.id)"
+            [class.item--worn]="hat() === item.id"
+            [class.item--denied]="denied() === item.id"
+            (click)="pickHat(item.id, item.price)"
+            (pointerenter)="previewHat.set(item.id)"
+            (pointerleave)="previewHat.set(null)"
+            (focus)="previewHat.set(item.id)"
+            (blur)="previewHat.set(null)"
+          >
+            <span class="hat-preview" aria-hidden="true">
+              <pg-mascot mood="idle" [color]="color()" [hat]="item.id" [size]="54" />
+            </span>
+            <span class="item__name">{{ item.name }}</span>
+            @if (hat() === item.id) {
+              <span class="item__tag item__tag--worn"
+                ><pg-icon name="check" [size]="16" /> חָבוּשׁ</span
+              >
+            } @else if (owns(item.id)) {
+              <span class="item__tag">חִבְשִׁי</span>
+            } @else {
+              <span class="item__tag item__tag--price">
+                <pg-icon name="coin" [size]="16" />
+                {{ item.price }}
+              </span>
+            }
+          </button>
+
+          @if (denied() === item.id) {
+            <p class="denied" role="status">עוֹד קְצָת מַטְבְּעוֹת וְזֶה שֶׁלָּךְ!</p>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+</div>

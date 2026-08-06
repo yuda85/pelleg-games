@@ -1,0 +1,32 @@
+<section class="keypad">
+  <p class="keypad__badge">
+    <pg-icon name="star" [size]="20" />
+    שְׁאֵלַת בּוֹנוּס — הַקְלִידִי אֶת הַתְּשׁוּבָה
+  </p>
+
+  <p class="prompt" dir="ltr">{{ prompt() }}</p>
+
+  <output class="entry" [class.entry--shake]="shaking()" dir="ltr" aria-live="polite">{{
+    entry()
+  }}</output>
+
+  <div class="pad" role="group" aria-label="מִקְלֶדֶת">
+    @for (digit of keys; track digit) {
+      <button
+        type="button"
+        class="key"
+        [class.key--zero]="digit === '0'"
+        [attr.aria-label]="digit"
+        (click)="type(digit)"
+      >
+        {{ digit }}
+      </button>
+    }
+    <button type="button" class="key key--back" aria-label="מְחִיקָה" (click)="backspace()">
+      <pg-icon name="back" [size]="24" />
+    </button>
+    <button type="button" class="key key--ok" aria-label="אִשּׁוּר" (click)="submit()">
+      <pg-icon name="check" [size]="26" />
+    </button>
+  </div>
+</section>

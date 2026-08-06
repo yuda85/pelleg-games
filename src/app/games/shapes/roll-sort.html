@@ -1,0 +1,45 @@
+<section class="deep">
+  <header class="deep__head">
+    <span class="deep__badge">
+      <pg-icon name="sparkle" [size]="20" />
+      סִבּוּב בּוֹנוּס
+    </span>
+    <h2 class="deep__title">מִתְגַּלְגֵּל אוֹ נֶעֱרָם?</h2>
+    <p class="deep__count">צוּרָה {{ index() + 1 }} מִתּוֹךְ {{ total() }}</p>
+  </header>
+
+  <pg-solid-view
+    [kind]="round().solid.id"
+    [fallbackName]="round().solid.name"
+    [label]="'צוּרָה לְמִיּוּן'"
+  />
+
+  <div class="bins" role="group" aria-label="מִיּוּן הַצּוּרָה">
+    <button
+      type="button"
+      class="bin"
+      [class.bin--picked]="picked() === true"
+      [class.bin--answer]="picked() !== null && round().rolls"
+      [disabled]="picked() !== null"
+      (click)="answer(true)"
+    >
+      מִתְגַּלְגֵּל
+    </button>
+    <button
+      type="button"
+      class="bin"
+      [class.bin--picked]="picked() === false"
+      [class.bin--answer]="picked() !== null && !round().rolls"
+      [disabled]="picked() !== null"
+      (click)="answer(false)"
+    >
+      נֶעֱרָם
+    </button>
+  </div>
+
+  @if (picked() !== null) {
+    <p class="deep__verdict" [class.deep__verdict--right]="wasRight()">
+      {{ wasRight() ? 'נָכוֹן!' : 'זֶה הָיָה ' + (round().rolls ? 'מִתְגַּלְגֵּל' : 'נֶעֱרָם') }}
+    </p>
+  }
+</section>

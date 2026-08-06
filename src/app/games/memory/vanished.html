@@ -1,0 +1,42 @@
+<section class="deep">
+  <header class="deep__head">
+    <span class="deep__badge">
+      <pg-icon name="sparkle" [size]="20" />
+      סִבּוּב בּוֹנוּס
+    </span>
+    <h2 class="deep__title">מַה נֶעֱלַם?</h2>
+    <p class="deep__count">שְׁאֵלָה {{ index() + 1 }} מִתּוֹךְ {{ total() }}</p>
+  </header>
+
+  @if (phase() === 'study') {
+    <p class="deep__hint">זִכְרִי אֶת הַמִּלִּים…</p>
+    <ul class="words">
+      @for (word of round().shown; track word) {
+        <li class="word">{{ word }}</li>
+      }
+    </ul>
+  } @else if (phase() === 'choose') {
+    <p class="deep__hint">אַחַת נֶעֶלְמָה — אֵיזוֹ?</p>
+    <ul class="words words--left">
+      @for (word of remaining(); track word) {
+        <li class="word word--stay">{{ word }}</li>
+      }
+      <li class="word word--gap" aria-label="כָּאן הָיְתָה מִלָּה">?</li>
+    </ul>
+
+    <div class="picks" role="group" aria-label="בַּחֲרִי אֶת הַמִּלָּה שֶׁנֶּעֶלְמָה">
+      @for (word of choices(); track word) {
+        <button
+          type="button"
+          class="pick"
+          [class.pick--picked]="isPicked(word)"
+          [class.pick--answer]="showAnswer(word)"
+          [disabled]="picked() !== null"
+          (click)="choose(word)"
+        >
+          {{ word }}
+        </button>
+      }
+    </div>
+  }
+</section>

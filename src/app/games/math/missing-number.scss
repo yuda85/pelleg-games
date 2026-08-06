@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+
+/* Deep water instead of the bright brook — the bonus round should not look
+   like another turn of the main game. */
+.deep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 3.5vw, 26px);
+  padding: clamp(20px, 5vw, 36px) clamp(16px, 4vw, 32px);
+  border-radius: var(--pg-r-xl);
+  background:
+    radial-gradient(520px 300px at 20% 0%, rgba(103, 232, 249, 0.35), rgba(103, 232, 249, 0) 70%),
+    linear-gradient(165deg, #1e3a8a, #0c4a6e 55%, #082f49);
+  box-shadow: var(--clay-raised-lg);
+  color: #f0f9ff;
+}
+
+.deep__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.deep__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(160deg, #fbbf24, #d97706);
+  color: #1f1300;
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.deep__title {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  color: #ffffff;
+}
+
+.deep__count {
+  margin: 0;
+  /* sky-200 on the deep gradient clears 4.5:1 comfortably. */
+  color: #bae6fd;
+  font-size: clamp(0.95rem, 3.2vw, 1.1rem);
+}
+
+/* --- clock ---------------------------------------------------------------- */
+
+.clock {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: min(360px, 100%);
+  block-size: 34px;
+  border-radius: var(--pg-r-pill);
+  background: rgba(8, 47, 73, 0.75);
+  box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.clock__bar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: linear-gradient(90deg, #22d3ee, #67e8f9);
+  transition: inline-size 950ms linear;
+}
+
+.clock__count {
+  position: relative;
+  font-family: var(--pg-font-display);
+  font-weight: 700;
+  color: #082f49;
+}
+
+.clock--low .clock__bar {
+  background: linear-gradient(90deg, #fb923c, #fbbf24);
+}
+
+.clock--low .clock__count {
+  color: #ffffff;
+}
+
+/* The stone board sits on deep water here, so it spans the panel. */
+.deep pg-stones {
+  inline-size: 100%;
+}

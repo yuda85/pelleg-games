@@ -1,0 +1,78 @@
+:host {
+  display: block;
+}
+
+.stones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 3vw, 24px);
+}
+
+.prompt {
+  margin: 0;
+  padding: clamp(14px, 3vw, 22px) clamp(22px, 5vw, 40px);
+  border-radius: var(--pg-r-xl);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised-lg);
+  font-family: var(--pg-font-display);
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  font-weight: 700;
+  color: var(--pg-primary);
+}
+
+.stones__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(10px, 2.6vw, 18px);
+}
+
+.stone {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(74px, 20vw, 96px);
+  block-size: clamp(74px, 20vw, 96px);
+  padding: 0;
+  border: 0;
+  /* Rounded like a river stone rather than a button. */
+  border-radius: 46% 54% 52% 48% / 52% 48% 52% 48%;
+  background: linear-gradient(160deg, #ffffff, #dbeafe);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-display);
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  font-weight: 700;
+  color: var(--pg-ink);
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out),
+    opacity var(--pg-t) var(--pg-ease-out);
+}
+
+.stone:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: var(--clay-raised-lg);
+}
+
+/* A wrong stone sinks into the water. It does not shout. */
+.stone--sunk {
+  opacity: 0.3;
+  box-shadow: var(--clay-sunk);
+  cursor: default;
+  animation: pg-wiggle 420ms ease-out;
+}
+
+.stone--landed {
+  background: linear-gradient(160deg, #bbf7d0, #4ade80);
+  color: #052e16;
+  animation: pg-pop 320ms var(--pg-ease-bounce);
+}
+
+.stones__water {
+  inline-size: min(520px, 100%);
+  block-size: 14px;
+  border-radius: var(--pg-r-pill);
+  background: linear-gradient(90deg, #a5f3fc, var(--pg-aqua-soft), #a5f3fc);
+  box-shadow: var(--clay-sunk);
+}

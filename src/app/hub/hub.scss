@@ -1,0 +1,272 @@
+:host {
+  display: block;
+}
+
+.hub {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 3vw, 22px);
+  padding-block: clamp(18px, 4vw, 34px) clamp(30px, 7vw, 56px);
+}
+
+/* --- hero ----------------------------------------------------------------- */
+
+.hub__hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(18px, 4vw, 30px) clamp(20px, 5vw, 36px);
+  border-radius: var(--pg-r-xl);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.hub__kicker {
+  margin: 0;
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  color: var(--pg-aqua);
+}
+
+.hub__title {
+  font-size: clamp(2rem, 8vw, 3.2rem);
+  color: var(--pg-primary);
+}
+
+.hub__sub {
+  margin: 4px 0 0;
+  color: var(--pg-ink-soft);
+}
+
+/* --- stats ---------------------------------------------------------------- */
+
+.hub__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(8px, 2vw, 14px);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-block-size: 84px;
+  padding: 12px 8px;
+  border: 0;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.stat:hover {
+  filter: brightness(1.04);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.stat--plain {
+  cursor: default;
+}
+
+button.stat--plain {
+  cursor: pointer;
+}
+
+.stat--coins {
+  color: var(--pg-gold);
+}
+
+.stat__value {
+  font-family: var(--pg-font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat__label {
+  font-size: 0.78rem;
+  color: var(--pg-ink-soft);
+}
+
+/* --- settings ------------------------------------------------------------- */
+
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-sunk);
+  animation: pg-pop 220ms var(--pg-ease-out);
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-block-size: 52px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  color: var(--pg-ink-soft);
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--pg-t) var(--pg-ease-out),
+    color var(--pg-t) var(--pg-ease-out),
+    box-shadow var(--pg-t) var(--pg-ease-out);
+}
+
+.switch--on {
+  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  box-shadow: var(--clay-raised);
+  color: var(--pg-on-color);
+}
+
+/* --- game cards ----------------------------------------------------------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(12px, 2.6vw, 18px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  --card-from: #e0f2fe;
+  --card-to: #a5f3fc;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  block-size: 100%;
+  padding: 18px 20px;
+  border-radius: var(--pg-r-lg);
+  background: linear-gradient(150deg, var(--card-from), var(--card-to));
+  box-shadow: var(--clay-raised);
+  color: var(--pg-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.card:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.card--grape {
+  --card-from: #ede9fe;
+  --card-to: #c4b5fd;
+}
+
+.card--mango {
+  --card-from: #fef3c7;
+  --card-to: #fcd34d;
+}
+
+.card--mint {
+  --card-from: #d1fae5;
+  --card-to: #6ee7b7;
+}
+
+.card__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 56px;
+  block-size: 56px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-primary);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.card__title {
+  font-family: var(--pg-font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card__blurb {
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.card__go {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-primary);
+}
+
+/* Unbuilt games say so rather than pretending to be playable. */
+.card--soon {
+  --card-from: #f1f5f9;
+  --card-to: #e2e8f0;
+  cursor: default;
+  box-shadow: var(--clay-sunk);
+}
+
+.card--soon:hover {
+  filter: none;
+  box-shadow: var(--clay-sunk);
+}
+
+.card--soon .card__icon {
+  color: #64748b;
+}
+
+.card__soon {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  font-family: var(--pg-font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+@media (max-width: 560px) {
+  .hub__hero {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .hub__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* The dressing room is a toy rather than a game, so it gets its own tint. */
+.card--rose {
+  --card-from: #fce7f3;
+  --card-to: #f9a8d4;
+}
