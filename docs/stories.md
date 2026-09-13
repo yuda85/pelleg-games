@@ -214,6 +214,21 @@ The reader reserves a 4:3 box before the file arrives, so text never jumps, and
 loads pictures lazily. **No filter is applied in dark mode** — art is content,
 and dimming or inverting illustrations is how they go muddy.
 
+Tapping an illustration opens it on its own, over the chapter:
+
+- The backdrop is **opaque**, not translucent — at 94% the chapter showed
+  through and competed with the picture.
+- A second tap goes **close up**: the picture becomes twice the screen width
+  and can be dragged around. On a portrait phone a 4:3 picture is already
+  screen-width when it "fits", so this is the state that earns the word
+  _enlarge_ — about 2× the size it has inline.
+- Out through the close button, a tap anywhere outside the picture, or Escape.
+  Focus goes back to the picture that was tapped, and the chapter is held still
+  underneath so nothing scrolls away behind it.
+- **Nothing animates.** An entrance animation that starts at `scale(0.6)` leaves
+  the overlay at 60% of the screen whenever it does not finish — under reduced
+  motion, or on a tab the browser is not painting. It is simply there.
+
 ## Where things live
 
 | What                       | Key                    | Notes                               |

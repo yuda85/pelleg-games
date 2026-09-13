@@ -252,6 +252,105 @@ describe('Reader', () => {
     expect(again.el.querySelectorAll('.para').length).toBe(paras);
   });
 
+  it('opens an illustration full-screen when it is tapped', async () => {
+    const { fixture, el } = await render();
+    expect(el.querySelector('.zoom')).toBeNull();
+
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+
+    const zoom = el.querySelector('.zoom')!;
+    expect(zoom).not.toBeNull();
+    expect(zoom.getAttribute('role')).toBe('dialog');
+    expect(zoom.getAttribute('aria-modal')).toBe('true');
+    expect(zoom.querySelector('img')!.getAttribute('src')).toBe(
+      el.querySelector('.illus img')!.getAttribute('src'),
+    );
+  });
+
+  it('holds the story still while the picture is open, and lets it go after', async () => {
+    const { fixture, el } = await render();
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+    expect(document.documentElement.hasAttribute('data-lightbox')).toBe(true);
+
+    el.querySelector<HTMLButtonElement>('.zoom__close')!.click();
+    await fixture.whenStable();
+    expect(document.documentElement.hasAttribute('data-lightbox')).toBe(false);
+  });
+
+  it('closes on a tap outside the picture, including the area around it', async () => {
+    const { fixture, el } = await render();
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+
+    // A tap that lands on the picture zooms in; it is not a request to close.
+    el.querySelector<HTMLImageElement>('.zoom__img')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom')).not.toBeNull();
+
+    // The scrolling stage fills most of the overlay, so a tap there has to
+    // count as "outside the picture" too.
+    el.querySelector<HTMLElement>('.zoom__stage')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom')).toBeNull();
+  });
+
+  it('goes close-up on a tap and back again, without closing', async () => {
+    const { fixture, el } = await render();
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom__stage--close')).toBeNull();
+
+    el.querySelector<HTMLImageElement>('.zoom__img')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom__stage--close')).not.toBeNull();
+
+    el.querySelector<HTMLImageElement>('.zoom__img')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom__stage--close')).toBeNull();
+    expect(el.querySelector('.zoom')).not.toBeNull();
+  });
+
+  it('opens the next picture fitted, not still zoomed in from the last one', async () => {
+    const { fixture, el } = await render();
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+    el.querySelector<HTMLImageElement>('.zoom__img')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom__stage--close')).not.toBeNull();
+
+    el.querySelector<HTMLButtonElement>('.zoom__close')!.click();
+    await fixture.whenStable();
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+    expect(el.querySelector('.zoom__stage--close')).toBeNull();
+  });
+
+  it('closes on Escape and puts focus back on the picture she tapped', async () => {
+    const { fixture, el } = await render();
+    const trigger = el.querySelector<HTMLButtonElement>('.illus__open')!;
+    document.body.appendChild(fixture.nativeElement);
+    trigger.click();
+    await fixture.whenStable();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await fixture.whenStable();
+
+    expect(el.querySelector('.zoom')).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('leaves nothing locked when the chapter is left with a picture open', async () => {
+    const { fixture, el } = await render();
+    el.querySelector<HTMLButtonElement>('.illus__open')!.click();
+    await fixture.whenStable();
+    expect(document.documentElement.hasAttribute('data-lightbox')).toBe(true);
+
+    fixture.destroy();
+    expect(document.documentElement.hasAttribute('data-lightbox')).toBe(false);
+  });
+
   it('says so when the chapter is not in the story', async () => {
     store.clear();
     TestBed.resetTestingModule();

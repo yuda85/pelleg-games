@@ -588,6 +588,11 @@ button {
   }
 }
 
+/* While an illustration fills the screen the story underneath holds still. */
+:root[data-lightbox] body {
+  overflow: hidden;
+}
+
 /* The reader's "still movement" switch turns off the calm-tool animations for
    someone who wants none, without touching the rest of the app. */
 :root[data-motion='still'] .calm-anim,

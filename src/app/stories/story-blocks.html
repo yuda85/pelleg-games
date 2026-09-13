@@ -14,9 +14,18 @@
 
     @case ('image') {
       <!-- The illustration that goes with this part of the chapter. `loading`
-           and a reserved box keep the text from jumping as it arrives. -->
+           and a reserved box keep the text from jumping as it arrives, and the
+           whole picture is a button so it can be looked at properly. -->
       <figure class="illus">
-        <img [src]="block.src" [alt]="block.alt ?? ''" loading="lazy" decoding="async" />
+        <button
+          type="button"
+          class="illus__open"
+          [attr.aria-label]="(block.alt || 'אִיּוּר') + ' — לְהַגְדָּלָה'"
+          (click)="openImage(block, $event)"
+        >
+          <img [src]="block.src" [alt]="block.alt ?? ''" loading="lazy" decoding="async" />
+          <span class="illus__hint" aria-hidden="true"><pg-icon name="search" [size]="18" /></span>
+        </button>
         @if (block.caption) {
           <figcaption>{{ block.caption }}</figcaption>
         }
@@ -112,4 +121,49 @@
       </aside>
     }
   }
+}
+
+<!-- One picture, filling the screen. Nothing else on it, nothing moving, and
+     three ways out: the button, the backdrop, Escape. -->
+@if (zoomed(); as picture) {
+  <div
+    class="zoom"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="picture.alt || 'אִיּוּר מֻגְדָּל'"
+    (click)="onBackdrop($event)"
+  >
+    <button
+      type="button"
+      class="zoom__close clay-round"
+      aria-label="סְגִירָה"
+      (click)="closeImage()"
+    >
+      <pg-icon name="x" [size]="24" />
+    </button>
+
+    <!-- On a phone a 4:3 picture is already as wide as the screen, so "bigger"
+         has to mean closer: the second tap fills the screen and the picture can
+         be dragged around to hunt for details. -->
+    <div class="zoom__stage" [class.zoom__stage--close]="upClose()">
+      <img
+        class="zoom__img"
+        [src]="picture.src"
+        [alt]="picture.alt ?? ''"
+        [attr.aria-label]="upClose() ? 'הִתְרַחֲקוּת' : 'הִתְקָרְבוּת'"
+        (click)="toggleUpClose($event)"
+      />
+    </div>
+
+    @if (picture.caption) {
+      <p class="zoom__caption">{{ picture.caption }}</p>
+    }
+    <p class="zoom__hint">
+      {{
+        upClose()
+          ? 'אֶפְשָׁר לִגְרֹר אֶת הַתְּמוּנָה. נְגִיעָה — חֲזָרָה.'
+          : 'נְגִיעָה בַּתְּמוּנָה מְקָרֶבֶת.'
+      }}
+    </p>
+  </div>
 }

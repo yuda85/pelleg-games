@@ -50,6 +50,39 @@
 .illus {
   margin: 1.9em 0;
 
+  /* The whole picture is the target — a small icon would be a poor one for a
+     finger at bedtime. */
+  &__open {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--pg-r-lg);
+    background: none;
+    cursor: pointer;
+    transition: filter var(--pg-t) var(--pg-ease-out);
+  }
+
+  &__open:hover {
+    filter: brightness(1.04);
+  }
+
+  /* Says "this opens" without putting a label over the art. */
+  &__hint {
+    position: absolute;
+    inset-block-end: 10px;
+    inset-inline-end: 10px;
+    display: grid;
+    place-items: center;
+    inline-size: 34px;
+    block-size: 34px;
+    border-radius: 50%;
+    background: var(--pg-scrim-surface);
+    box-shadow: var(--clay-raised);
+    color: var(--pg-ink-soft);
+  }
+
   img {
     display: block;
     inline-size: 100%;
@@ -232,4 +265,95 @@
   margin: 0;
   font-size: 0.82rem;
   color: var(--pg-ink-soft);
+}
+
+/* ==========================================================================
+   One illustration, filling the screen
+   ========================================================================== */
+
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(14px, 4vw, 34px);
+  /* Dark in both themes: a white field at bedtime is the wrong answer, and the
+     picture reads better against it either way. */
+  /* Opaque, not translucent: at 94% the chapter still showed through and
+     competed with the picture. One thing on the screen at a time. */
+  background: #090a18;
+  /* Deliberately not animated. `pg-pop` starts at scale(0.6), and an overlay
+     that only reaches full size once an animation *completes* is 60% of the
+     screen whenever it does not — under reduced motion, or on a tab the
+     browser is not painting. A bedtime reader wants it to be simply there. */
+}
+
+/* The picture's own area. In close-up it becomes the thing that scrolls, so a
+   finger drags the picture rather than the page. */
+.zoom__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-block-size: 0;
+  flex: 1;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.zoom__img {
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  border-radius: var(--pg-r-md);
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+/* Close up: twice the width of the screen, free to be dragged around. A 4:3
+   illustration on a portrait phone is already screen-width when it "fits", so
+   this is the state that actually earns the word "enlarge". */
+.zoom__stage--close {
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  .zoom__img {
+    inline-size: 200%;
+    max-inline-size: none;
+    max-block-size: none;
+    flex: 0 0 auto;
+    border-radius: 0;
+    cursor: zoom-out;
+  }
+}
+
+.zoom__caption,
+.zoom__hint {
+  margin: 0;
+  max-inline-size: 60ch;
+  flex: 0 0 auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.zoom__caption {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.zoom__hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.zoom__close {
+  position: absolute;
+  inset-block-start: clamp(12px, 3vw, 22px);
+  inset-inline-end: clamp(12px, 3vw, 22px);
+  background: var(--pg-surface);
+  color: var(--pg-ink);
 }

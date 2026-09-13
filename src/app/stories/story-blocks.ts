@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { Icon } from '../shared/icon';
 import {
   ACTIVITY_ICONS,
@@ -7,6 +16,7 @@ import {
   type ActivityBlock,
   type Block,
   type ChoiceOption,
+  type ImageBlock,
 } from '../core/story-types';
 import { CalmCard } from './calm-card';
 
@@ -50,6 +60,62 @@ export class StoryBlocks {
   readonly unchosen = output<ChoiceMade>();
 
   private readonly opened = signal<ReadonlySet<string>>(new Set());
+  private readonly destroyRef = inject(DestroyRef);
+
+  /* --- looking at an illustration properly ------------------------------ */
+
+  /** The illustration filling the screen, or null. */
+  protected readonly zoomed = signal<ImageBlock | null>(null);
+
+  /** Where focus came from, so Escape puts it back on the right picture. */
+  private cameFrom: HTMLElement | null = null;
+
+  /** Second state of the overlay: filling the screen, draggable. */
+  protected readonly upClose = signal(false);
+
+  constructor() {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && this.zoomed()) this.closeImage();
+    };
+    document.addEventListener('keydown', onKey);
+    this.destroyRef.onDestroy(() => {
+      document.removeEventListener('keydown', onKey);
+      // Leaving the chapter with a picture open must not leave the page locked.
+      lockScroll(false);
+    });
+  }
+
+  protected openImage(block: ImageBlock, event: Event): void {
+    this.cameFrom = event.currentTarget as HTMLElement;
+    this.zoomed.set(block);
+    this.upClose.set(false);
+    lockScroll(true);
+  }
+
+  protected toggleUpClose(event: MouseEvent): void {
+    // A tap on the picture must not also reach the backdrop and close it.
+    event.stopPropagation();
+    this.upClose.update((on) => !on);
+  }
+
+  protected closeImage(): void {
+    this.zoomed.set(null);
+    this.upClose.set(false);
+    lockScroll(false);
+    // Back to the picture she tapped, not to the top of the chapter.
+    this.cameFrom?.focus();
+    this.cameFrom = null;
+  }
+
+  /**
+   * A tap anywhere except on the picture closes. The scrolling stage covers
+   * most of the overlay, so testing only the backdrop element itself would
+   * leave most of "outside the picture" doing nothing.
+   */
+  protected onBackdrop(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.zoom__img, .zoom__close')) this.closeImage();
+  }
 
   /** What is actually on the page once the forks are applied. */
   protected readonly shown = computed(() => visibleBlocks(this.blocks(), this.marks()));
@@ -99,4 +165,15 @@ function siblingMarks(block: ActivityBlock): string[] {
   return (block.options ?? [])
     .map((option) => option.sets)
     .filter((mark): mark is string => mark !== undefined);
+}
+
+/**
+ * Holds the page still while a picture is full-screen. The reader saves a
+ * scroll *ratio*, so a locked page cannot corrupt the bookmark — and without
+ * this the story scrolls away behind the overlay under a stray finger.
+ */
+function lockScroll(locked: boolean): void {
+  const root = document.documentElement;
+  if (locked) root.setAttribute('data-lightbox', '');
+  else root.removeAttribute('data-lightbox');
 }
