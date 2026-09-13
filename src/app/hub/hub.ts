@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Progress } from '../core/progress';
+import { THEME_CHOICES, THEME_ICONS, THEME_LABELS, Theme, type ThemeChoice } from '../core/theme';
 import { Speech } from '../core/speech';
 import { Icon } from '../shared/icon';
 import { Mascot } from '../shared/mascot';
@@ -52,6 +53,14 @@ const GAMES: readonly GameCard[] = [
     tint: 'mint',
   },
   {
+    id: 'stories',
+    title: 'סִפּוּרִים בְּהֶמְשֵׁכִים',
+    blurb: 'פֶּרֶק לִפְנֵי הַשֵּׁנָה, קוֹרְאִים בְּיַחַד',
+    route: '/stories',
+    icon: 'book',
+    tint: 'night',
+  },
+  {
     id: 'dressup',
     title: 'חֲדַר הַהַלְבָּשָׁה',
     blurb: 'הַלְבִּישִׁי אֶת הַבֻּבָּה בְּמַטְבְּעוֹת שֶׁהִרְוַחְתְּ',
@@ -71,6 +80,12 @@ const GAMES: readonly GameCard[] = [
 export class Hub {
   private readonly progress = inject(Progress);
   private readonly speech = inject(Speech);
+  private readonly themeService = inject(Theme);
+
+  protected readonly themes = THEME_CHOICES;
+  protected readonly themeLabels = THEME_LABELS;
+  protected readonly themeIcons = THEME_ICONS;
+  protected readonly theme = this.themeService.theme;
 
   protected readonly games = GAMES;
   protected readonly settingsOpen = signal(false);
@@ -91,5 +106,9 @@ export class Hub {
 
   protected toggleSettings(): void {
     this.settingsOpen.update((open) => !open);
+  }
+
+  protected setTheme(choice: ThemeChoice): void {
+    this.themeService.set(choice);
   }
 }

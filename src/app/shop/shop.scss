@@ -31,7 +31,7 @@
   box-shadow: var(--clay-raised);
   font-family: var(--pg-font-display);
   font-weight: 700;
-  color: var(--pg-gold);
+  color: var(--pg-gold-text);
 }
 
 .preview {
@@ -126,11 +126,11 @@
 }
 
 .item__tag--price {
-  color: var(--pg-gold);
+  color: var(--pg-gold-text);
 }
 
 .item__tag--worn {
-  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  background: var(--grad-aqua);
   box-shadow: none;
   color: var(--pg-on-color);
 }

@@ -26,7 +26,7 @@
   place-items: center;
   padding: clamp(14px, 3vw, 26px);
   border-radius: var(--pg-r-xl);
-  background: radial-gradient(circle at 50% 30%, #ffffff, #fce7f3 75%);
+  background: var(--stage-rose);
   box-shadow: var(--clay-raised-lg);
 }
 
@@ -54,7 +54,7 @@
 }
 
 .tab--on {
-  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  background: var(--grad-aqua);
   box-shadow: var(--clay-raised);
   color: var(--pg-on-color);
 }
@@ -134,11 +134,11 @@
 }
 
 .item__tag--price {
-  color: var(--pg-gold);
+  color: var(--pg-gold-text);
 }
 
 .item__tag--worn {
-  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  background: var(--grad-aqua);
   box-shadow: none;
   color: var(--pg-on-color);
 }

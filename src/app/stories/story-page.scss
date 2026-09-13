@@ -1,0 +1,228 @@
+:host {
+  display: block;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 3vw, 22px);
+  padding-block: clamp(18px, 4vw, 34px) clamp(30px, 7vw, 56px);
+}
+
+.page__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page__crumb {
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  color: var(--pg-ink-soft);
+}
+
+.page__section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  color: var(--pg-aqua);
+}
+
+/* --- hero ----------------------------------------------------------------- */
+
+.hero {
+  display: flex;
+  gap: clamp(16px, 4vw, 28px);
+  padding: clamp(16px, 4vw, 28px);
+  border-radius: var(--pg-r-xl);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.hero__cover {
+  inline-size: clamp(120px, 22vw, 180px);
+  block-size: clamp(160px, 29vw, 240px);
+  flex: 0 0 auto;
+  box-shadow: var(--clay-raised);
+}
+
+.hero__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-inline-size: 0;
+
+  h1 {
+    font-size: clamp(1.4rem, 5.4vw, 2.1rem);
+    color: var(--pg-primary);
+    overflow-wrap: anywhere;
+  }
+}
+
+.hero__blurb {
+  margin: 0;
+  max-inline-size: 62ch;
+  line-height: 1.7;
+  color: var(--pg-ink-soft);
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.hero__tag {
+  color: var(--pg-aqua);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.hero__done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--pg-success);
+}
+
+/* --- chapter list --------------------------------------------------------- */
+
+.chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: chapter;
+}
+
+.ch {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.ch:hover {
+  filter: brightness(1.03);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.ch__num {
+  display: grid;
+  place-items: center;
+  inline-size: 46px;
+  block-size: 46px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  font-family: var(--pg-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--pg-primary);
+}
+
+.ch--done .ch__num {
+  background: var(--grad-go);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-on-color);
+}
+
+/* The bookmark. One chapter at a time carries it. */
+.ch--current {
+  background: var(--tint-calm);
+}
+
+.ch--current .ch__num {
+  background: var(--grad-primary);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-on-color);
+}
+
+.ch__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ch__title {
+  font-family: var(--pg-font-display);
+  font-size: 1.08rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ch__meta {
+  font-size: 0.8rem;
+  color: var(--pg-ink-soft);
+}
+
+.ch__go {
+  --round: 40px;
+  color: var(--pg-ink-soft);
+}
+
+/* --- missing -------------------------------------------------------------- */
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(28px, 8vw, 56px) 20px;
+  border-radius: var(--pg-r-xl);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-sunk);
+  text-align: center;
+  color: var(--pg-ink-soft);
+
+  h1 {
+    font-size: 1.4rem;
+    color: var(--pg-primary);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero__cover {
+    inline-size: 150px;
+    block-size: 200px;
+  }
+
+  .hero__meta,
+  .hero__actions {
+    justify-content: center;
+  }
+}

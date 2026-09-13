@@ -27,12 +27,67 @@ Components consume the tokens; they never hardcode a colour or a shadow.
 | `--pg-ink-soft`     | `#475569` | secondary text             |
 
 Every text colour clears 4.5:1 on both `--pg-bg` and `--pg-surface`. The darker
-aqua/success/gold values exist for exactly that reason — the brighter versions of
-each are used only as gradient stops or on dark fills, never as text on white.
+aqua/success values exist for exactly that reason — the brighter versions of each
+are used only as gradient stops or on dark fills, never as text on white.
 
-**Light mode only, deliberately.** Dark mode is a claymorphism anti-pattern: the
-style is built on a light source and paired highlight/shadow, and it collapses on
-a dark field.
+Gold is the exception that needed its own token: `--pg-gold` (`#d97706`) is fine
+as an **icon** but only reaches 3.2:1 as text on white, so gold text uses
+`--pg-gold-text` instead.
+
+## Light and dark
+
+The app started light-only, on the reasoning that claymorphism is built on a
+light source and collapses on a dark field. That is true of a naive inversion —
+and it is what the dark theme is written to avoid. On a dark field the clay
+recipes change their **light source**, not their hue: the outer shadow goes from
+indigo to black, and the highlight drops from 95% white to about 5%. Both sets
+are written out in full in [styles.scss](../src/styles.scss) rather than derived,
+so each can be tuned by eye.
+
+Three states, resolved entirely in CSS:
+
+| Selector                                                                  | When                                            |
+| ------------------------------------------------------------------------- | ----------------------------------------------- |
+| `:root`                                                                   | light — the original values                     |
+| `@media (prefers-color-scheme: dark)` + `:root:not([data-theme='light'])` | the device asks for dark and nothing was chosen |
+| `:root[data-theme='dark']`                                                | dark, chosen                                    |
+
+`data-theme` is written on `<html>` by [theme.ts](../src/app/core/theme.ts), and
+**before first paint** by a small inline script in `index.html`, so the page
+never flashes the wrong theme. Following the device writes _no_ attribute, which
+is what lets the media query answer and makes a change to the system preference
+land with no JavaScript at all. The service listens for that change only to keep
+`<meta name="theme-color">` in step.
+
+The switch is three buttons in the hub's settings panel: בהיר / כהה / לפי המכשיר.
+
+**Rules for dark:**
+
+- Brand colours are _text_ tokens: `--pg-primary` and friends darken in light and
+  lighten in dark. Anything **filled** uses a `--grad-*` token instead, and those
+  keep their hue — a saturated indigo button reads as a button on either field.
+- Pastel card tints would glare, so each drops to a deep version of **its own
+  hue**: the shelf still reads as five colours, not five greys.
+- Content art — the mascot, the doll, the stickers, the 3D solids, the game
+  pieces — is **not** themed. Colour carries meaning in the games, and no
+  `filter: invert()` is used anywhere.
+
+## Shared primitives
+
+Beyond the tokens, `styles.scss` carries the shapes every screen is built from,
+so a component never redraws one:
+
+| Class         | What it is                                                      |
+| ------------- | --------------------------------------------------------------- |
+| `.clay`       | a raised surface                                                |
+| `.clay-btn`   | the button, with `--primary`, `--aqua`, `--go`, `--ghost`       |
+| `.clay-panel` | a stacked panel of content; `--lg` is the page-header weight    |
+| `.clay-round` | a round icon button or badge, sized by `--round`                |
+| `.clay-tag`   | a small sunk chip — a tag, a count, a reading time              |
+| `.clay-field` | a labelled form control (input, textarea, select) and its hints |
+
+`.clay-field` arrived with the story editor: the games take taps rather than
+typing, so the app had no form controls until then.
 
 ## Clay recipes
 

@@ -1,0 +1,168 @@
+@if (story(); as story) {
+  @if (chapter(); as chapter) {
+    <div class="bar">
+      <div class="bar__row pg-shell">
+        <a
+          class="clay-round bar__btn"
+          [routerLink]="['/stories', story.id]"
+          aria-label="רְשִׁימַת הַפְּרָקִים"
+        >
+          <pg-icon name="back" [size]="22" />
+        </a>
+
+        <span class="bar__where">
+          <span class="bar__story">{{ story.title }}</span>
+          <span class="bar__ch">
+            פֶּרֶק <span dir="ltr">{{ index() + 1 }}</span> מִתּוֹךְ
+            <span dir="ltr">{{ chapters().length }}</span>
+          </span>
+        </span>
+
+        <button
+          type="button"
+          class="clay-round bar__btn"
+          [attr.aria-expanded]="sizePanelOpen()"
+          aria-controls="size-panel"
+          aria-label="גֹּדֶל הַטֶּקְסְט"
+          (click)="toggleSizePanel()"
+        >
+          <pg-icon name="text-size" [size]="22" />
+        </button>
+      </div>
+
+      <!-- Position in the chapter: a hairline, not a dashboard. -->
+      <div
+        class="bar__rail"
+        role="img"
+        [attr.aria-label]="'הִתְקַדְּמוּת בַּפֶּרֶק: ' + progressPercent() + ' אָחוּז'"
+      >
+        <span class="bar__fill" [style.inline-size.%]="progress() * 100"></span>
+      </div>
+
+      @if (sizePanelOpen()) {
+        <div class="sizes pg-shell" id="size-panel">
+          <div class="sizes__inner" role="group" aria-label="גֹּדֶל הַטֶּקְסְט">
+            @for (size of sizes; track size) {
+              <button
+                type="button"
+                class="sizes__btn"
+                [class.sizes__btn--on]="textSize() === size"
+                [attr.aria-pressed]="textSize() === size"
+                (click)="setTextSize(size)"
+              >
+                {{ sizeLabels[size] }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <article class="reader">
+      <header class="reader__head">
+        <p class="reader__kicker">
+          פֶּרֶק <span dir="ltr">{{ index() + 1 }}</span> ·
+          <span dir="ltr">~{{ minutes() }}</span> דַּקּוֹת
+        </p>
+        <h1>{{ chapter.title }}</h1>
+      </header>
+
+      <pg-story-blocks
+        [blocks]="chapter.blocks"
+        [marks]="marks()"
+        [picks]="picks()"
+        (chosen)="onChosen($event)"
+        (unchosen)="onUnchosen($event)"
+      />
+
+      <!-- End of chapter. Nothing here happens on its own. -->
+      <footer class="end">
+        @if (!done()) {
+          <p class="end__mark">סוֹף הַפֶּרֶק</p>
+          <button type="button" class="clay-btn clay-btn--go end__cta" (click)="finishChapter()">
+            <pg-icon name="check" [size]="20" />
+            סִיַּמְנוּ אֶת הַפֶּרֶק
+          </button>
+          @if (next(); as next) {
+            <a class="end__quiet" [routerLink]="['/stories', story.id, next.id]">
+              דִּלּוּג לַפֶּרֶק הַבָּא בְּלִי לְסַמֵּן
+            </a>
+          }
+        } @else if (next(); as next) {
+          <div class="end__card" role="status">
+            <p class="end__mark end__mark--done">
+              <pg-icon name="check" [size]="18" />
+              סִיַּמְנוּ אֶת פֶּרֶק <span dir="ltr">{{ index() + 1 }}</span>
+            </p>
+            <p class="end__next-label">הַפֶּרֶק הַבָּא</p>
+            <p class="end__next-title">{{ next.title }}</p>
+            <a class="clay-btn clay-btn--primary" [routerLink]="['/stories', story.id, next.id]">
+              <pg-icon name="forward" [size]="20" />
+              מַמְשִׁיכִים
+            </a>
+            <p class="end__tonight">אוֹ נַמְשִׁיךְ מָחָר — הַסִּימָנִיָּה שְׁמוּרָה.</p>
+          </div>
+        } @else {
+          <div class="end__card end__card--fin" role="status">
+            <div class="clay-round end__stars" aria-hidden="true">
+              <pg-icon name="moon" [size]="30" />
+            </div>
+            <p class="end__mark end__mark--done">סוֹף הַסִּפּוּר</p>
+            <p class="end__tonight">
+              זֶהוּ. אֶפְשָׁר לִסְגֹּר אֶת הָאוֹר, וְאֶפְשָׁר תָּמִיד לַחֲזֹר לְפֶרֶק אָהוּב.
+            </p>
+            <a class="clay-btn clay-btn--ghost" [routerLink]="['/stories', story.id]">
+              רְשִׁימַת הַפְּרָקִים
+            </a>
+            <a class="clay-btn clay-btn--ghost" routerLink="/stories">
+              <pg-icon name="book" [size]="20" />
+              סִפּוּר אַחֵר
+            </a>
+          </div>
+        }
+
+        @if (done()) {
+          <button type="button" class="end__quiet" (click)="undoFinish()">
+            בְּעֶצֶם עוֹד לֹא סִיַּמְנוּ
+          </button>
+        }
+      </footer>
+
+      <nav class="steps" aria-label="נִוּוּט בֵּין פְּרָקִים">
+        @if (previous(); as prev) {
+          <a class="steps__link" [routerLink]="['/stories', story.id, prev.id]">
+            <pg-icon name="back" [size]="20" />
+            <span class="steps__text">
+              <span class="steps__dir">הַפֶּרֶק הַקּוֹדֵם</span>
+              <span class="steps__title">{{ prev.title }}</span>
+            </span>
+          </a>
+        } @else {
+          <span></span>
+        }
+
+        @if (next(); as next) {
+          <a class="steps__link steps__link--next" [routerLink]="['/stories', story.id, next.id]">
+            <span class="steps__text">
+              <span class="steps__dir">הַפֶּרֶק הַבָּא</span>
+              <span class="steps__title">{{ next.title }}</span>
+            </span>
+            <pg-icon name="forward" [size]="20" />
+          </a>
+        }
+      </nav>
+    </article>
+  } @else {
+    <div class="missing clay-panel pg-shell">
+      <h1>הַפֶּרֶק לֹא נִמְצָא</h1>
+      <a class="clay-btn clay-btn--primary" [routerLink]="['/stories', story.id]">
+        רְשִׁימַת הַפְּרָקִים
+      </a>
+    </div>
+  }
+} @else {
+  <div class="missing clay-panel pg-shell">
+    <h1>הַסִּפּוּר לֹא נִמְצָא</h1>
+    <a class="clay-btn clay-btn--primary" routerLink="/stories">חֲזָרָה לַסִּפְרִיָּה</a>
+  </div>
+}

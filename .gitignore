@@ -49,3 +49,9 @@ Thumbs.db
 # Python bytecode from bundled skills
 __pycache__/
 *.pyc
+
+# Tooling scratch
+/.claude-flow/
+
+# Tooling scratch
+/.claude-flow/

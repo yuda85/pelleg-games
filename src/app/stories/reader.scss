@@ -1,0 +1,321 @@
+/* The four text sizes. One variable moves the prose, the sub-heads and the
+   activity cards together — `story-blocks.scss` reads the same token. */
+
+:host {
+  display: block;
+  --read-size: 1.12rem;
+}
+
+:host(.read--sm) {
+  --read-size: 1rem;
+}
+
+:host(.read--lg) {
+  --read-size: 1.32rem;
+}
+
+:host(.read--xl) {
+  --read-size: 1.55rem;
+}
+
+/* --- toolbar -------------------------------------------------------------- */
+
+.bar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-sticky);
+  background: var(--pg-scrim);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--pg-drop);
+}
+
+.bar__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 8px;
+}
+
+.bar__where {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-inline-size: 0;
+  line-height: 1.3;
+}
+
+.bar__story {
+  font-family: var(--pg-font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  /* The toolbar is one line tall whatever the story is called. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar__ch {
+  font-size: 0.78rem;
+  color: var(--pg-ink-soft);
+}
+
+/* A hairline, not a dashboard — it tells her where she is and nothing else. */
+.bar__rail {
+  block-size: 4px;
+  background: var(--pg-line);
+}
+
+.bar__fill {
+  display: block;
+  block-size: 100%;
+  background: var(--grad-rail);
+}
+
+.sizes {
+  padding-block: 0 10px;
+}
+
+.sizes__inner {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  animation: pg-pop 200ms var(--pg-ease-out);
+}
+
+.sizes__btn {
+  flex: 1;
+  min-block-size: 46px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  color: var(--pg-ink-soft);
+  cursor: pointer;
+  transition:
+    background var(--pg-t) var(--pg-ease-out),
+    color var(--pg-t) var(--pg-ease-out);
+}
+
+/* The labels grow with what they set, so the choice is visible, not just named. */
+.sizes__btn:nth-child(1) {
+  font-size: 0.8rem;
+}
+.sizes__btn:nth-child(2) {
+  font-size: 0.92rem;
+}
+.sizes__btn:nth-child(3) {
+  font-size: 1.06rem;
+}
+.sizes__btn:nth-child(4) {
+  font-size: 1.2rem;
+}
+
+.sizes__btn--on {
+  background: var(--grad-aqua);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-on-color);
+}
+
+/* --- the page ------------------------------------------------------------- */
+
+.reader {
+  /* Measure is in `ch` of the reading size, so it holds at every text size. */
+  inline-size: min(64ch, 100%);
+  margin-inline: auto;
+  padding-inline: clamp(18px, 5vw, 28px);
+  padding-block: clamp(20px, 5vw, 36px) clamp(40px, 9vw, 72px);
+  font-size: var(--read-size);
+}
+
+.reader__head {
+  margin-bottom: clamp(20px, 4vw, 30px);
+}
+
+.reader__kicker {
+  margin: 0 0 6px;
+  font-family: var(--pg-font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--pg-aqua);
+}
+
+.reader__head h1 {
+  font-size: calc(var(--read-size) * 1.6);
+  line-height: 1.25;
+  color: var(--pg-primary);
+  overflow-wrap: anywhere;
+}
+
+/* --- end of chapter ------------------------------------------------------- */
+
+.end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-block-start: clamp(28px, 6vw, 44px);
+  padding-block-start: clamp(20px, 4vw, 30px);
+  border-block-start: 2px dashed var(--pg-line);
+  text-align: center;
+}
+
+.end__mark {
+  margin: 0;
+  font-family: var(--pg-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--pg-ink-soft);
+  letter-spacing: 0.03em;
+}
+
+.end__mark--done {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--pg-success);
+}
+
+.end__cta {
+  min-inline-size: min(280px, 100%);
+}
+
+.end__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  inline-size: 100%;
+  padding: clamp(20px, 5vw, 30px);
+  border-radius: var(--pg-r-xl);
+  background: var(--tint-calm);
+  box-shadow: var(--clay-raised);
+  animation: pg-pop 260ms var(--pg-ease-out);
+}
+
+.end__next-label {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--pg-ink-soft);
+}
+
+.end__next-title {
+  margin: 0;
+  font-family: var(--pg-font-display);
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: var(--pg-primary);
+  overflow-wrap: anywhere;
+}
+
+.end__tonight {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--pg-ink-soft);
+}
+
+/* The story's last page gets the one night-coloured moment in the reader. */
+.end__card--fin {
+  background: var(--grad-finale);
+  color: var(--pg-on-color);
+  gap: 12px;
+
+  .end__mark--done,
+  .end__tonight {
+    color: rgba(255, 255, 255, 0.94);
+  }
+}
+
+.end__stars {
+  --round: 62px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+  color: var(--pg-moon);
+}
+
+/* Secondary by weight, not by size — it still has to be tappable. */
+.end__quiet {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-inline: 14px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.84rem;
+  color: var(--pg-ink-soft);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* --- chapter steps -------------------------------------------------------- */
+
+.steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-start: clamp(24px, 5vw, 36px);
+}
+
+.steps__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-inline-size: 48%;
+  padding: 12px 16px;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow var(--pg-t) var(--pg-ease-out);
+}
+
+.steps__link:hover {
+  box-shadow: var(--clay-raised-lg);
+}
+
+.steps__link--next {
+  margin-inline-start: auto;
+  text-align: end;
+}
+
+.steps__text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.steps__dir {
+  font-size: 0.74rem;
+  color: var(--pg-aqua);
+}
+
+.steps__title {
+  font-family: var(--pg-font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- missing -------------------------------------------------------------- */
+
+.missing {
+  align-items: center;
+  margin-block: clamp(24px, 8vw, 60px);
+  text-align: center;
+
+  h1 {
+    font-size: 1.4rem;
+    color: var(--pg-primary);
+  }
+}

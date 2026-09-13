@@ -1,0 +1,286 @@
+/* A calm tool sits apart from both the prose and the story's own stops: a
+   quieter card, aqua rather than indigo, with one slow moving shape. */
+
+:host {
+  display: block;
+  margin: 1.8em 0;
+}
+
+.calm {
+  border-radius: var(--pg-r-lg);
+  background: var(--tint-mist);
+  box-shadow: var(--clay-raised);
+  overflow: hidden;
+}
+
+/* --- closed --------------------------------------------------------------- */
+
+.calm__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  inline-size: 100%;
+  min-block-size: 52px;
+  padding: 14px 16px;
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--pg-t) var(--pg-ease-out);
+}
+
+.calm__head:hover {
+  background: var(--pg-veil-soft);
+}
+
+.calm__badge,
+.calm__go {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--grad-aqua);
+  color: var(--on-fill);
+  box-shadow: var(--clay-raised);
+}
+
+.calm__go {
+  background: var(--pg-surface);
+  color: var(--pg-aqua);
+}
+
+.calm__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.calm__kind {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--pg-aqua);
+}
+
+.calm__title {
+  font-family: var(--pg-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  overflow-wrap: anywhere;
+}
+
+.calm__blurb {
+  font-size: 0.84rem;
+  color: var(--pg-ink-soft);
+}
+
+/* --- open ----------------------------------------------------------------- */
+
+.calm__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  animation: pg-pop 220ms var(--pg-ease-out);
+}
+
+.calm__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calm__title--open {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* Every escape hatch on this card is a quiet link, never a loud button — none
+   of them is a failure. */
+.calm__quiet {
+  min-block-size: 44px;
+  padding-inline: 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--pg-ink-soft);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.calm__intro,
+.calm__hint,
+.calm__count,
+.calm__outro {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--pg-ink-soft);
+}
+
+.calm__outro {
+  font-family: var(--pg-font-display);
+  font-size: 1rem;
+  color: var(--pg-aqua);
+}
+
+.calm__cue {
+  margin: 0;
+  font-family: var(--pg-font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  text-align: center;
+}
+
+.calm__cue--big {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  text-align: start;
+}
+
+.calm__count {
+  text-align: center;
+}
+
+.calm__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.calm__row--end {
+  justify-content: center;
+}
+
+.calm__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 10px 16px;
+    border-radius: var(--pg-r-pill);
+    background: var(--pg-surface);
+    box-shadow: var(--clay-raised);
+    font-family: var(--pg-font-display);
+    font-size: 0.95rem;
+    color: var(--pg-ink);
+  }
+}
+
+/* --- the one moving thing ------------------------------------------------- */
+
+.calm__stage {
+  display: grid;
+  place-items: center;
+  min-block-size: 150px;
+}
+
+/* A flower opening and closing over eleven seconds. Slow enough to breathe
+   with, and with no pause at the top — nothing here asks anyone to hold. */
+.flower {
+  inline-size: 118px;
+  block-size: 118px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--pg-aqua-soft), var(--pg-aqua));
+  box-shadow: var(--clay-raised);
+  transform: scale(0.55);
+  animation: calm-bloom 11s var(--pg-ease-out) infinite;
+}
+
+/* The silence she is running: a ring that fills, and a number. */
+.calm__holds {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calm__hold {
+  min-block-size: 52px;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  cursor: pointer;
+  transition: box-shadow var(--pg-t) var(--pg-ease-out);
+}
+
+.calm__hold:hover {
+  box-shadow: var(--clay-raised-lg);
+}
+
+.ring {
+  inline-size: 128px;
+  block-size: 128px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--pg-aqua) calc(var(--fill, 0) * 360deg),
+    var(--pg-surface-sunk) 0
+  );
+  box-shadow: var(--clay-sunk);
+  transition: background 1s linear;
+}
+
+/* With movement off the ring stops sweeping and just holds its place. */
+.ring--still {
+  transition: none;
+}
+
+/* The duck, rolling and stopping. */
+.roll {
+  inline-size: 92px;
+  block-size: 92px;
+  border-radius: 42% 58% 52% 48%;
+  background: var(--grad-gold);
+  box-shadow: var(--clay-raised);
+  animation: calm-roll 6s var(--pg-ease-out) infinite;
+}
+
+@keyframes calm-bloom {
+  0%,
+  100% {
+    transform: scale(0.55);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes calm-roll {
+  0%,
+  45% {
+    transform: translateX(0) rotate(0deg);
+  }
+  50%,
+  95% {
+    transform: translateX(-34px) rotate(-24deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+/* With motion off the shape still shows the state, it just stops moving. */
+:root[data-motion='still'] .flower {
+  transform: scale(0.85);
+  opacity: 1;
+}

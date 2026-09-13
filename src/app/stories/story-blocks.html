@@ -1,0 +1,115 @@
+@for (block of shown(); track block.id) {
+  @switch (block.kind) {
+    @case ('paragraph') {
+      <p class="para">{{ block.text }}</p>
+    }
+
+    @case ('heading') {
+      <h2 class="subhead">{{ block.text }}</h2>
+    }
+
+    @case ('note') {
+      <p class="note">{{ block.text }}</p>
+    }
+
+    @case ('image') {
+      <!-- The illustration that goes with this part of the chapter. `loading`
+           and a reserved box keep the text from jumping as it arrives. -->
+      <figure class="illus">
+        <img [src]="block.src" [alt]="block.alt ?? ''" loading="lazy" decoding="async" />
+        @if (block.caption) {
+          <figcaption>{{ block.caption }}</figcaption>
+        }
+      </figure>
+    }
+
+    @case ('scene') {
+      <div class="scene" role="separator" aria-label="מַעֲבַר סְצֵנָה">
+        <span></span><span></span><span></span>
+      </div>
+    }
+
+    @case ('calm') {
+      <pg-calm-card [block]="block" [openAll]="openAll()" />
+    }
+
+    @case ('activity') {
+      <aside class="stop" [class.stop--open]="isOpen(block.id)" [class.stop--fork]="forks(block)">
+        <button
+          type="button"
+          class="stop__head"
+          [attr.aria-expanded]="isOpen(block.id)"
+          [attr.aria-controls]="'stop-' + block.id"
+          (click)="toggle(block.id)"
+        >
+          <span class="stop__badge"><pg-icon [name]="iconFor(block)" [size]="20" /></span>
+          <span class="stop__text">
+            <span class="stop__kind">
+              {{ labelFor(block) }}
+              @if (forks(block)) {
+                · מְשַׁנֶּה אֶת הַהֶמְשֵׁךְ
+              }
+            </span>
+            <span class="stop__title">{{ block.title }}</span>
+          </span>
+          <span class="stop__chev">
+            <pg-icon [name]="isOpen(block.id) ? 'chevron-up' : 'chevron-down'" [size]="20" />
+          </span>
+        </button>
+
+        <div class="stop__body" [id]="'stop-' + block.id" [hidden]="!isOpen(block.id)">
+          <p class="stop__what">{{ block.instructions }}</p>
+
+          @if (block.options; as options) {
+            @if (forks(block)) {
+              <!-- A fork: these are buttons, and the one picked changes what
+                   the rest of the story says. -->
+              <ul class="stop__forks" role="group" [attr.aria-label]="block.title">
+                @for (option of options; track option.text; let i = $index) {
+                  <li>
+                    <button
+                      type="button"
+                      class="fork"
+                      [class.fork--on]="pickedIndex(block) === i"
+                      [attr.aria-pressed]="pickedIndex(block) === i"
+                      (click)="choose(block, i)"
+                    >
+                      @if (pickedIndex(block) === i) {
+                        <pg-icon name="check" [size]="16" />
+                      }
+                      {{ option.text }}
+                    </button>
+                  </li>
+                }
+              </ul>
+              <p class="stop__note">
+                @if (pickedIndex(block) >= 0) {
+                  הַסִּפּוּר מַמְשִׁיךְ מִכָּאן. לְחִיצָה שׁוּב עַל אוֹתָהּ בְּחִירָה מְבַטֶּלֶת
+                  אוֹתָהּ.
+                } @else {
+                  אֵין כָּאן תְּשׁוּבָה נְכוֹנָה — אֲבָל מַה שֶּׁתִּבְחֲרוּ יִקְרֶה בֶּאֱמֶת
+                  בַּהֶמְשֵׁךְ.
+                }
+              </p>
+            } @else {
+              <ul class="stop__options">
+                @for (option of options; track option.text) {
+                  <li>{{ option.text }}</li>
+                }
+              </ul>
+              <p class="stop__note">
+                אֵין כָּאן תְּשׁוּבָה נְכוֹנָה. אֶפְשָׁר לְדַבֵּר, אֶפְשָׁר לְדַלֵּג וּלְהַמְשִׁיךְ
+                לִקְרֹא.
+              </p>
+            }
+          } @else {
+            <p class="stop__note">
+              אֵין כָּאן תְּשׁוּבָה נְכוֹנָה. אֶפְשָׁר לְדַבֵּר, אֶפְשָׁר לְדַלֵּג וּלְהַמְשִׁיךְ
+              לִקְרֹא.
+            </p>
+          }
+        </div>
+      </aside>
+    }
+  }
+}

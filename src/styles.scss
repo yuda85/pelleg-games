@@ -4,15 +4,44 @@
    Pelegames — global design system
    Style: Claymorphism (soft 3D, chunky, toy-like) — matched to kids/education.
    Theme: "פֶּלֶג" = brook. Water, droplets, aqua. Nikud marks are droplets.
-   Light mode only by design: dark mode is a claymorphism anti-pattern.
+
+   Two themes. Every colour in the app comes from a token declared here, so a
+   component never has to know which one is on. The three states are:
+
+     :root                                    light — the values the app shipped with
+     :root:not([data-theme='light']) + media   the device's dark preference
+     :root[data-theme='dark']                  dark, chosen
+
+   `data-theme` is written on <html> by core/theme.ts, and before first paint
+   by the inline script in index.html. Absent means "follow the device".
+
+   Claymorphism on a dark field needs a different light source, not inverted
+   colours: the outer shadow goes black rather than indigo, and the highlight
+   drops from 95% white to a few per cent. Both sets are written out in full
+   rather than derived, so each can be tuned by eye.
    ========================================================================== */
 
 :root {
-  /* --- Color ------------------------------------------------------------ */
+  /* --- Surfaces --------------------------------------------------------- */
   --pg-bg: #eef6ff;
   --pg-surface: #ffffff;
   --pg-surface-sunk: #e8effb;
+  /* The two soft lights behind the page. */
+  --pg-glow-1: #ffffff;
+  --pg-glow-2: #cffafe;
+  /* Hairlines, rails, and the stream under the level map. */
+  --pg-line: rgba(79, 70, 229, 0.12);
+  --pg-line-strong: #bcd3ea;
+  /* Translucent backing for a sticky bar sitting over content. */
+  --pg-scrim: rgba(238, 246, 255, 0.93);
+  --pg-scrim-surface: rgba(255, 255, 255, 0.95);
+  /* A wash of the surface colour, for a highlight on top of a tint. */
+  --pg-veil: rgba(255, 255, 255, 0.75);
+  --pg-veil-soft: rgba(255, 255, 255, 0.6);
 
+  /* --- Brand, as text and icons ----------------------------------------- */
+  /* Read *on* a surface, so these darken in light and lighten in dark.
+     Anything filled uses a --grad-* token instead. */
   --pg-primary: #4f46e5; /* indigo — structure, headings */
   --pg-primary-soft: #a5b4fc;
   --pg-aqua: #0e7490; /* brook — the app's signature */
@@ -22,11 +51,70 @@
   --pg-warn: #b45309;
   --pg-danger: #be123c;
   --pg-gold: #d97706;
+  /* Gold as an icon reads at #d97706, but as *text* it only reaches 3.2:1 on
+     white — so text gets its own step down the same ramp. */
+  --pg-gold-text: #8f5200;
 
-  /* Text — all >= 4.5:1 on --pg-bg and --pg-surface */
+  /* --- Text — all >= 4.5:1 on --pg-bg and --pg-surface ------------------- */
   --pg-ink: #1e1b4b;
   --pg-ink-soft: #475569;
+  --pg-ink-faint: #64748b;
   --pg-on-color: #ffffff;
+
+  /* --- Fills ------------------------------------------------------------ */
+  /* A filled control keeps its hue in both themes — a saturated indigo button
+     reads as a button on either field. What moves is the near-white tile and
+     the pastels, which glare on a dark page. */
+  --grad-primary: linear-gradient(160deg, #6366f1, #4f46e5);
+  --grad-aqua: linear-gradient(160deg, #0891b2, #0e7490);
+  --grad-go: linear-gradient(160deg, #16a34a, #15803d);
+  --grad-gold: linear-gradient(160deg, #fbbf24, #d97706);
+  --grad-right: linear-gradient(160deg, #bbf7d0, #4ade80);
+  --grad-tile: linear-gradient(160deg, #ffffff, #e0f2fe);
+  --grad-rail: linear-gradient(90deg, #6366f1, #0e7490);
+  --on-fill: #ffffff;
+  --on-gold: #1f1300;
+  --on-right: #052e16;
+
+  /* --- Card tints ------------------------------------------------------- */
+  /* The hub shelf, and anything else that wants a coloured card.
+     `--tint-ink` is the only text colour allowed on one. */
+  --tint-aqua-from: #e0f2fe;
+  --tint-aqua-to: #a5f3fc;
+  --tint-grape-from: #ede9fe;
+  --tint-grape-to: #c4b5fd;
+  --tint-mango-from: #fef3c7;
+  --tint-mango-to: #fcd34d;
+  --tint-mint-from: #d1fae5;
+  --tint-mint-to: #6ee7b7;
+  --tint-rose-from: #fce7f3;
+  --tint-rose-to: #f9a8d4;
+  --tint-night-from: #e0e7ff;
+  --tint-night-to: #a5b4fc;
+  --tint-quiet-from: #f1f5f9;
+  --tint-quiet-to: #e2e8f0;
+  --tint-ink: #334155;
+  --tint-ink-soft: #475569;
+  /* A soft indigo panel: "continue reading", the end-of-chapter card. */
+  --tint-calm: linear-gradient(150deg, #e0e7ff, #eef2ff);
+  --tint-shell: linear-gradient(160deg, #fce7f3, #f9a8d4);
+  --tint-paper: linear-gradient(160deg, #fffbeb, #fde68a);
+  --tint-mist: linear-gradient(160deg, #ecfeff, #cffafe);
+  --tint-drop: linear-gradient(160deg, #ffffff, #cffafe);
+  /* The one deep panel in light mode: the last page of a story. */
+  --grad-finale: linear-gradient(160deg, #312e81, #4f46e5);
+  --pg-moon: #fde68a;
+
+  /* --- Status wells ----------------------------------------------------- */
+  --pg-warn-well: #fef3c7;
+  --pg-danger-well: #ffe4e6;
+  --pg-success-well: #dcfce7;
+
+  /* --- Stages ----------------------------------------------------------- */
+  /* Where a piece of art sits: the 3D solid, the dressing-room doll. */
+  --stage-cool: radial-gradient(circle at 50% 35%, #ffffff, #dbeafe 70%);
+  --stage-rose: radial-gradient(circle at 50% 30%, #ffffff, #fce7f3 75%);
+  --stage-stone: linear-gradient(160deg, #ffffff, #dbeafe);
 
   /* --- Type ------------------------------------------------------------- */
   --pg-font-display: 'Fredoka', 'Rubik', system-ui, sans-serif;
@@ -53,6 +141,8 @@
     inset 5px 5px 11px rgba(79, 70, 229, 0.22), inset -4px -4px 9px rgba(255, 255, 255, 0.9);
   --clay-sunk:
     inset 4px 4px 9px rgba(79, 70, 229, 0.14), inset -3px -3px 7px rgba(255, 255, 255, 0.9);
+  /* Lifts a bar off the page where clay alone is not enough separation. */
+  --pg-drop: 0 6px 18px rgba(79, 70, 229, 0.08);
 
   /* --- Motion ----------------------------------------------------------- */
   --pg-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -66,6 +156,127 @@
   --z-modal: 30;
   --z-drag: 50;
   --z-toast: 60;
+
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   Dark — one list of overrides, applied twice: once for the device
+   preference, and once for an explicit choice.
+   ========================================================================== */
+
+@mixin dark {
+  /* --- Surfaces --------------------------------------------------------- */
+  /* Indigo-tinted rather than neutral grey: the brook is still the theme. */
+  --pg-bg: #12132a;
+  --pg-surface: #1e2040;
+  --pg-surface-sunk: #171935;
+  --pg-glow-1: #2a2c55;
+  --pg-glow-2: #0e3a47;
+  --pg-line: rgba(255, 255, 255, 0.1);
+  --pg-line-strong: #3b3f6b;
+  --pg-scrim: rgba(18, 19, 42, 0.93);
+  --pg-scrim-surface: rgba(30, 32, 64, 0.95);
+  --pg-veil: rgba(255, 255, 255, 0.12);
+  --pg-veil-soft: rgba(255, 255, 255, 0.08);
+
+  /* --- Brand, as text and icons ----------------------------------------- */
+  /* The light values are tuned for 4.5:1 on white and are unreadable on
+     #1e2040, so each moves to the light end of its own ramp — not to grey. */
+  --pg-primary: #b3bcff;
+  --pg-primary-soft: #7c85d8;
+  --pg-aqua: #67e8f9;
+  --pg-aqua-soft: #2b6b7a;
+  --pg-success: #86efac;
+  --pg-success-soft: #2f7048;
+  --pg-warn: #fcd34d;
+  --pg-danger: #fda4af;
+  --pg-gold: #fbbf24;
+  --pg-gold-text: #fcd34d;
+
+  /* --- Text ------------------------------------------------------------- */
+  --pg-ink: #eef1ff;
+  --pg-ink-soft: #b4bad6;
+  --pg-ink-faint: #9098b8;
+  --pg-on-color: #ffffff;
+
+  /* --- Fills ------------------------------------------------------------ */
+  --grad-primary: linear-gradient(160deg, #6366f1, #4338ca);
+  --grad-aqua: linear-gradient(160deg, #0e8ba8, #0b6178);
+  --grad-go: linear-gradient(160deg, #16a34a, #14663a);
+  --grad-gold: linear-gradient(160deg, #f0ab1e, #b45309);
+  --grad-right: linear-gradient(160deg, #1d7a45, #2fa35f);
+  --grad-tile: linear-gradient(160deg, #272a52, #1b2547);
+  --grad-rail: linear-gradient(90deg, #818cf8, #22d3ee);
+  --on-fill: #ffffff;
+  --on-gold: #2a1c00;
+  --on-right: #ecfdf5;
+
+  /* --- Card tints ------------------------------------------------------- */
+  /* Each tint keeps its hue and drops to a deep version of itself, so the
+     shelf still reads as five different colours rather than five greys. */
+  --tint-aqua-from: #123a4d;
+  --tint-aqua-to: #10556a;
+  --tint-grape-from: #2c2450;
+  --tint-grape-to: #45379a;
+  --tint-mango-from: #45300e;
+  --tint-mango-to: #7a5410;
+  --tint-mint-from: #113a2c;
+  --tint-mint-to: #1a6146;
+  --tint-rose-from: #431030;
+  --tint-rose-to: #7a1f52;
+  --tint-night-from: #23264f;
+  --tint-night-to: #3b3f86;
+  --tint-quiet-from: #20223f;
+  --tint-quiet-to: #191b33;
+  --tint-ink: #e7eaff;
+  --tint-ink-soft: #c3c8e6;
+  --tint-calm: linear-gradient(150deg, #262a55, #1c1e3d);
+  --tint-shell: linear-gradient(160deg, #3a1430, #6b2050);
+  --tint-paper: linear-gradient(160deg, #3a2f12, #5d4a16);
+  --tint-mist: linear-gradient(160deg, #16324a, #10485c);
+  --tint-drop: linear-gradient(160deg, #23335a, #10485c);
+  --grad-finale: linear-gradient(160deg, #1d1b4d, #312e81);
+  --pg-moon: #fde68a;
+
+  /* --- Status wells ----------------------------------------------------- */
+  --pg-warn-well: #3d2f0c;
+  --pg-danger-well: #45151f;
+  --pg-success-well: #123a24;
+
+  /* --- Stages ----------------------------------------------------------- */
+  --stage-cool: radial-gradient(circle at 50% 35%, #2b3163, #141a36 70%);
+  --stage-rose: radial-gradient(circle at 50% 30%, #3a2145, #1d1430 75%);
+  --stage-stone: linear-gradient(160deg, #2a2e58, #1a2340);
+
+  /* --- Clay recipes ----------------------------------------------------- */
+  /* Light source still top-left, but on a dark field the highlight is a hint
+     of white rather than a wash of it, and the shadow is black. */
+  --clay-raised:
+    7px 7px 16px rgba(0, 0, 0, 0.5), -5px -5px 12px rgba(255, 255, 255, 0.045),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.055), inset -3px -3px 7px rgba(0, 0, 0, 0.4);
+  --clay-raised-lg:
+    12px 12px 28px rgba(0, 0, 0, 0.55), -8px -8px 20px rgba(255, 255, 255, 0.055),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.06), inset -4px -4px 10px rgba(0, 0, 0, 0.45);
+  --clay-pressed:
+    inset 5px 5px 11px rgba(0, 0, 0, 0.55), inset -4px -4px 9px rgba(255, 255, 255, 0.05);
+  --clay-sunk:
+    inset 4px 4px 9px rgba(0, 0, 0, 0.45), inset -3px -3px 7px rgba(255, 255, 255, 0.045);
+  --pg-drop: 0 6px 18px rgba(0, 0, 0, 0.45);
+
+  color-scheme: dark;
+}
+
+/* No explicit choice: follow the device. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include dark;
+  }
+}
+
+/* An explicit choice wins over the device, in both directions. */
+:root[data-theme='dark'] {
+  @include dark;
 }
 
 * {
@@ -84,8 +295,8 @@ body {
   line-height: 1.6;
   color: var(--pg-ink);
   background:
-    radial-gradient(1100px 620px at 90% -10%, #ffffff 0%, rgba(255, 255, 255, 0) 60%),
-    radial-gradient(900px 520px at 0% 100%, #cffafe 0%, rgba(207, 250, 254, 0) 62%), var(--pg-bg);
+    radial-gradient(1100px 620px at 90% -10%, var(--pg-glow-1) 0%, transparent 60%),
+    radial-gradient(900px 520px at 0% 100%, var(--pg-glow-2) 0%, transparent 62%), var(--pg-bg);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -160,23 +371,139 @@ button {
 }
 
 .clay-btn--primary {
-  --btn-bg: linear-gradient(160deg, #6366f1, var(--pg-primary));
-  --btn-fg: var(--pg-on-color);
+  --btn-bg: var(--grad-primary);
+  --btn-fg: var(--on-fill);
 }
 
 .clay-btn--aqua {
-  --btn-bg: linear-gradient(160deg, #0891b2, var(--pg-aqua));
-  --btn-fg: var(--pg-on-color);
+  --btn-bg: var(--grad-aqua);
+  --btn-fg: var(--on-fill);
 }
 
 .clay-btn--go {
-  --btn-bg: linear-gradient(160deg, #16a34a, var(--pg-success));
-  --btn-fg: var(--pg-on-color);
+  --btn-bg: var(--grad-go);
+  --btn-fg: var(--on-fill);
 }
 
 .clay-btn--ghost {
   box-shadow: var(--clay-sunk);
   background: var(--pg-surface-sunk);
+}
+
+/* A stacked panel of content on a raised surface — the shape most screens are
+   built out of. `--lg` is the page-header weight. */
+.clay-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(14px, 3.4vw, 22px);
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+}
+
+.clay-panel--lg {
+  padding: clamp(14px, 3vw, 22px) clamp(16px, 4vw, 26px);
+  border-radius: var(--pg-r-xl);
+  box-shadow: var(--clay-raised-lg);
+}
+
+/* A round icon button or badge. Sized by `--round`, never below the 44px floor. */
+.clay-round {
+  --round: 52px;
+  display: grid;
+  place-items: center;
+  inline-size: var(--round);
+  block-size: var(--round);
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-primary);
+  cursor: pointer;
+  transition: box-shadow var(--pg-t) var(--pg-ease-out);
+}
+
+.clay-round:hover {
+  box-shadow: var(--clay-raised-lg);
+}
+
+.clay-round:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--clay-sunk);
+}
+
+/* A small chip: a tag, a count, a reading time. Sunk, so it reads as a label
+   rather than as something to press. */
+.clay-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  font-size: 0.79rem;
+  color: var(--pg-ink-soft);
+}
+
+/* Form primitives. The games take taps rather than typing, so these arrived
+   with the story editor — but they belong here with the other clay recipes
+   rather than inside one screen, for the same reason `.clay-btn` does. */
+.clay-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  > span {
+    font-family: var(--pg-font-display);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--pg-ink);
+  }
+
+  input,
+  textarea,
+  select {
+    inline-size: 100%;
+    /* Same 52px floor as every other target in the app. */
+    min-block-size: 52px;
+    padding: 12px 16px;
+    border: 0;
+    border-radius: var(--pg-r-md);
+    background: var(--pg-surface-sunk);
+    box-shadow: var(--clay-sunk);
+    font: inherit;
+    font-size: 1rem;
+    color: var(--pg-ink);
+  }
+
+  textarea {
+    min-block-size: 92px;
+    line-height: 1.7;
+    resize: vertical;
+  }
+
+  /* A dark field needs the browser's own placeholder grey lifted too. */
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--pg-ink-faint);
+    opacity: 1;
+  }
+
+  .hint {
+    font-size: 0.79rem;
+    line-height: 1.6;
+    color: var(--pg-ink-soft);
+  }
+
+  .error {
+    font-size: 0.79rem;
+    font-weight: 600;
+    color: var(--pg-danger);
+  }
 }
 
 /* Keyboard focus stays obvious against every button variant. */
@@ -259,4 +586,12 @@ button {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* The reader's "still movement" switch turns off the calm-tool animations for
+   someone who wants none, without touching the rest of the app. */
+:root[data-motion='still'] .calm-anim,
+:root[data-motion='still'] .calm-anim * {
+  animation: none !important;
+  transition: none !important;
 }

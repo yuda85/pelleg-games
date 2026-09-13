@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { canLeaveEditor } from './stories/editor-guard';
 
 /** Every screen is lazy — the hub should not ship the game it hasn't opened yet. */
 export const routes: Routes = [
@@ -46,6 +47,28 @@ export const routes: Routes = [
     path: 'shapes/:setIndex',
     title: 'עוֹלַם הַצּוּרוֹת',
     loadComponent: () => import('./games/shapes/shapes-play').then((m) => m.ShapesPlay),
+  },
+  {
+    path: 'stories',
+    title: 'סִפּוּרִים בְּהֶמְשֵׁכִים',
+    loadComponent: () => import('./stories/library').then((m) => m.Library),
+  },
+  {
+    // Before ':storyId', or "editor" would be read as a story id.
+    path: 'stories/editor',
+    title: 'עוֹרֵךְ הַסִּפּוּרִים',
+    loadComponent: () => import('./stories/editor').then((m) => m.StoryEditor),
+    canDeactivate: [canLeaveEditor],
+  },
+  {
+    path: 'stories/:storyId',
+    title: 'סִפּוּרִים בְּהֶמְשֵׁכִים',
+    loadComponent: () => import('./stories/story-page').then((m) => m.StoryPage),
+  },
+  {
+    path: 'stories/:storyId/:chapterId',
+    title: 'סִפּוּרִים בְּהֶמְשֵׁכִים',
+    loadComponent: () => import('./stories/reader').then((m) => m.Reader),
   },
   {
     path: 'dressup',

@@ -8,6 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "icons": "node tools/make-icons.mjs",
+    "illustrate": "node tools/illustrate.mjs",
+    "images": "node tools/optimize-images.mjs",
     "build:pages": "ng build --base-href \"${BASE_HREF:-/Pelleg/}\" && node tools/pages-postbuild.mjs",
     "preview": "npx --yes http-server dist/pelegames/browser -p 4300 -c-1"
   },

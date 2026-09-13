@@ -12,7 +12,7 @@
   inline-size: min(340px, 82vw);
   aspect-ratio: 1;
   border-radius: var(--pg-r-xl);
-  background: radial-gradient(circle at 50% 35%, #ffffff, #dbeafe 70%);
+  background: var(--stage-cool);
   box-shadow: var(--clay-sunk);
   overflow: hidden;
   /* The camera takes the drag; the page must not scroll under her finger. */

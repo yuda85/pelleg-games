@@ -34,7 +34,7 @@
   box-shadow: var(--clay-raised);
   font-family: var(--pg-font-display);
   font-weight: 700;
-  color: var(--pg-gold);
+  color: var(--pg-gold-text);
 }
 
 .streak {
@@ -44,8 +44,8 @@
   margin: 0;
   padding: 8px 22px;
   border-radius: var(--pg-r-pill);
-  background: linear-gradient(160deg, #fbbf24, var(--pg-gold));
-  color: #1f1300;
+  background: var(--grad-gold);
+  color: var(--on-gold);
   font-family: var(--pg-font-display);
   font-weight: 600;
   box-shadow: var(--clay-raised);
@@ -112,12 +112,12 @@
 }
 
 .star {
-  color: #cbd5e1;
+  color: var(--pg-ink-faint);
   line-height: 0;
 }
 
 .star--on {
-  color: var(--pg-gold);
+  color: var(--pg-gold-text);
   /* Staggered so three stars land one after another. */
   animation: pg-pop 420ms var(--pg-ease-bounce) backwards;
   animation-delay: calc(var(--i) * 130ms);

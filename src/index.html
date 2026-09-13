@@ -13,6 +13,32 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="פֶּלֶגֵ'ימְס" />
+    <!--
+      Theme, before first paint. Angular boots too late to set this without a
+      flash of the wrong colours, so the stored choice is applied here and the
+      Theme service picks up the same attribute afterwards. No stored choice
+      leaves the attribute off, and the stylesheet's media query answers.
+    -->
+    <script>
+      (function () {
+        try {
+          var choice = localStorage.getItem('pelegames.theme.v1');
+          if (choice === 'dark' || choice === 'light') {
+            document.documentElement.setAttribute('data-theme', choice);
+          }
+          var dark =
+            choice === 'dark' ||
+            (choice !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', dark ? '#12132A' : '#EEF6FF');
+          if (localStorage.getItem('pelegames.motion.v1') === 'still') {
+            document.documentElement.setAttribute('data-motion', 'still');
+          }
+        } catch (e) {
+          /* Private browsing: the app still boots, on the device preference. */
+        }
+      })();
+    </script>
   </head>
   <body>
     <pg-root></pg-root>

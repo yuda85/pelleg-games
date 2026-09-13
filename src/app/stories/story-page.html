@@ -1,0 +1,119 @@
+@if (story(); as story) {
+  <div class="page pg-shell">
+    <header class="page__bar">
+      <a routerLink="/stories" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַסִּפְרִיָּה">
+        <pg-icon name="back" [size]="22" />
+      </a>
+      <span class="page__crumb">סִפּוּרִים בְּהֶמְשֵׁכִים</span>
+    </header>
+
+    <section class="hero">
+      <pg-story-cover class="hero__cover" [storyId]="story.id" [cover]="story.cover" />
+
+      <div class="hero__body">
+        <h1>{{ story.title }}</h1>
+        <p class="hero__blurb">{{ story.blurb }}</p>
+
+        <div class="hero__meta">
+          <span class="clay-tag hero__tag">
+            <pg-icon name="list" [size]="16" />
+            {{ rows().length }} פְּרָקִים
+          </span>
+          <span class="clay-tag hero__tag">
+            <pg-icon name="moon" [size]="16" />
+            <span dir="ltr">~{{ minutes() }}</span> דַּקּוֹת קְרִיאָה
+          </span>
+          @for (tag of story.tags; track tag) {
+            <span class="clay-tag">{{ tag }}</span>
+          }
+        </div>
+
+        <div class="hero__actions">
+          @if (started() && resumeChapterId()) {
+            <a
+              class="clay-btn clay-btn--go"
+              [routerLink]="['/stories', story.id, resumeChapterId()]"
+            >
+              <pg-icon name="bookmark" [size]="20" />
+              מַמְשִׁיכִים מִכָּאן
+            </a>
+          }
+          @if (firstChapterId(); as first) {
+            <a
+              class="clay-btn"
+              [class.clay-btn--primary]="!started()"
+              [class.clay-btn--ghost]="started()"
+              [routerLink]="['/stories', story.id, first]"
+            >
+              <pg-icon name="book" [size]="20" />
+              {{ started() ? 'מֵהַתְחָלָה' : 'מַתְחִילִים לִקְרֹא' }}
+            </a>
+          }
+          @if (started()) {
+            <button type="button" class="clay-btn clay-btn--ghost" (click)="restart()">
+              <pg-icon name="refresh" [size]="20" />
+              אִפּוּס הַהִתְקַדְּמוּת
+            </button>
+          }
+        </div>
+
+        @if (finished()) {
+          <p class="hero__done" role="status">
+            <pg-icon name="check" [size]="18" />
+            קָרָאתֶם אֶת כָּל הַפְּרָקִים. אֶפְשָׁר תָּמִיד לַחֲזֹר לְפֶרֶק אָהוּב.
+          </p>
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="chapters-head">
+      <h2 id="chapters-head" class="page__section">
+        <pg-icon name="list" [size]="20" />
+        הַפְּרָקִים
+      </h2>
+
+      <ol class="chapters">
+        @for (row of rows(); track row.chapter.id) {
+          <li>
+            <a
+              class="ch"
+              [class.ch--done]="row.done"
+              [class.ch--current]="row.current && !row.done"
+              [routerLink]="['/stories', story.id, row.chapter.id]"
+            >
+              <span class="ch__num" aria-hidden="true">
+                @if (row.done) {
+                  <pg-icon name="check" [size]="20" />
+                } @else {
+                  <span dir="ltr">{{ row.number }}</span>
+                }
+              </span>
+              <span class="ch__body">
+                <span class="ch__title">{{ row.chapter.title }}</span>
+                <span class="ch__meta">
+                  פֶּרֶק <span dir="ltr">{{ row.number }}</span> ·
+                  <span dir="ltr">~{{ row.minutes }}</span> דַּקּוֹת
+                  @if (row.done) {
+                    · נִקְרָא
+                  } @else if (row.current) {
+                    · עָצַרְנוּ כָּאן
+                  }
+                </span>
+              </span>
+              <span class="clay-round ch__go"><pg-icon name="forward" [size]="20" /></span>
+            </a>
+          </li>
+        }
+      </ol>
+    </section>
+  </div>
+} @else {
+  <div class="page pg-shell">
+    <div class="missing">
+      <pg-icon name="search" [size]="34" />
+      <h1>הַסִּפּוּר לֹא נִמְצָא</h1>
+      <p>יִתָּכֵן שֶׁהוּא נִמְחַק מֵהַמַּכְשִׁיר הַזֶּה.</p>
+      <a routerLink="/stories" class="clay-btn clay-btn--primary">חֲזָרָה לַסִּפְרִיָּה</a>
+    </div>
+  </div>
+}

@@ -37,7 +37,7 @@
   border: 0;
   /* Rounded like a river stone rather than a button. */
   border-radius: 46% 54% 52% 48% / 52% 48% 52% 48%;
-  background: linear-gradient(160deg, #ffffff, #dbeafe);
+  background: var(--stage-stone);
   box-shadow: var(--clay-raised);
   font-family: var(--pg-font-display);
   font-size: clamp(1.5rem, 6vw, 2rem);
@@ -64,8 +64,8 @@
 }
 
 .stone--landed {
-  background: linear-gradient(160deg, #bbf7d0, #4ade80);
-  color: #052e16;
+  background: var(--grad-right);
+  color: var(--on-right);
   animation: pg-pop 320ms var(--pg-ease-bounce);
 }
 
@@ -73,6 +73,6 @@
   inline-size: min(520px, 100%);
   block-size: 14px;
   border-radius: var(--pg-r-pill);
-  background: linear-gradient(90deg, #a5f3fc, var(--pg-aqua-soft), #a5f3fc);
+  background: var(--grad-rail);
   box-shadow: var(--clay-sunk);
 }

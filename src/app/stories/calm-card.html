@@ -1,0 +1,144 @@
+<aside class="calm" [class.calm--open]="isOpen()">
+  @if (!isOpen()) {
+    <button type="button" class="calm__head" (click)="open()">
+      <span class="calm__badge"><pg-icon [name]="tool().icon" [size]="22" /></span>
+      <span class="calm__text">
+        <span class="calm__kind">
+          רֶגַע שֶׁל שֶׁקֶט · <span dir="ltr">~{{ tool().seconds }}</span> שְׁנִיּוֹת
+        </span>
+        <span class="calm__title">{{ title() }}</span>
+        <span class="calm__blurb">{{ tool().blurb }}</span>
+      </span>
+      <span class="calm__go"><pg-icon name="play" [size]="20" /></span>
+    </button>
+  } @else {
+    <div class="calm__body" role="group" [attr.aria-label]="title()">
+      <header class="calm__bar">
+        <span class="calm__title calm__title--open">{{ title() }}</span>
+        <button
+          type="button"
+          class="calm__quiet"
+          [attr.aria-pressed]="stillMotion()"
+          (click)="toggleMotion()"
+        >
+          {{ stillMotion() ? 'הַחְזָרַת תְּנוּעָה' : 'בְּלִי תְּנוּעָה' }}
+        </button>
+        <button type="button" class="calm__quiet" (click)="close()">סְגִירָה</button>
+      </header>
+
+      @if (!finished()) {
+        <p class="calm__intro">{{ intro() }}</p>
+
+        @switch (tool().mode) {
+          @case ('breathe') {
+            <!-- The flower opens and closes on its own; nobody taps in time. -->
+            <div class="calm__stage" aria-hidden="true">
+              <span class="calm-anim flower" [class.flower--out]="step() === 0"></span>
+            </div>
+            <p class="calm__cue" role="status">{{ currentStep() }}</p>
+            <p class="calm__hint">
+              אֶפְשָׁר לְהַנִּיחַ אֶת הַמָּסָךְ וְלַעֲשׂוֹת אֶת זֶה בְּיַחַד, בְּלִי לְהִסְתַּכֵּל.
+            </p>
+          }
+
+          @case ('pulse') {
+            <div class="calm__stage" aria-hidden="true">
+              <span class="calm-anim roll"></span>
+            </div>
+            <p class="calm__cue" role="status">{{ currentStep() }}</p>
+            <p class="calm__hint">
+              אֶפְשָׁר לְהַנִּיחַ אֶת הַמָּסָךְ וְלַעֲשׂוֹת אֶת זֶה בְּיַחַד, בְּלִי לְהִסְתַּכֵּל.
+            </p>
+          }
+
+          @case ('steps') {
+            <p class="calm__cue calm__cue--big" role="status">{{ currentStep() }}</p>
+            <p class="calm__count">
+              <span dir="ltr">{{ step() + 1 }}</span> מִתּוֹךְ
+              <span dir="ltr">{{ steps().length }}</span>
+            </p>
+            <div class="calm__row">
+              @if (step() > 0) {
+                <button type="button" class="clay-btn clay-btn--ghost" (click)="back()">
+                  <pg-icon name="back" [size]="20" />
+                  אָחוֹרָה
+                </button>
+              }
+              <button type="button" class="clay-btn clay-btn--aqua" (click)="next()">
+                {{ isLastStep() ? 'סִיַּמְנוּ' : 'הָלְאָה' }}
+                @if (!isLastStep()) {
+                  <pg-icon name="forward" [size]="20" />
+                }
+              </button>
+            </div>
+          }
+
+          @case ('hold') {
+            @if (remaining() < 0) {
+              <!-- She sets the length before anything starts. -->
+              <ul class="calm__holds">
+                @for (seconds of holds(); track seconds) {
+                  <li>
+                    <button type="button" class="calm__hold" (click)="startHold(seconds)">
+                      <span dir="ltr">{{ seconds }}</span> שְׁנִיּוֹת
+                    </button>
+                  </li>
+                }
+              </ul>
+              <p class="calm__hint">
+                אֶפְשָׁר לְהַתְחִיל בְּקָצָר. חָמֵשׁ שְׁנִיּוֹת זֶה אֹרֶךְ מְעֻלֶּה.
+              </p>
+            } @else {
+              <div class="calm__stage" aria-hidden="true">
+                <span
+                  class="calm-anim ring"
+                  [style.--fill]="holdProgress()"
+                  [class.ring--still]="stillMotion()"
+                ></span>
+              </div>
+              <p class="calm__cue" role="status" aria-live="off">
+                <span dir="ltr">{{ remaining() }}</span>
+              </p>
+              <p class="calm__hint">
+                אַתֶּם מְנַהֲלִים אֶת הַשֶּׁקֶט הַזֶּה. לַעֲצֹר בְּאֶמְצַע זֶה לֹא לְהַפְסִיד.
+              </p>
+              <div class="calm__row calm__row--end">
+                <button type="button" class="clay-btn clay-btn--aqua" (click)="done()">
+                  מַסְפִּיק לִי
+                </button>
+              </div>
+            }
+          }
+
+          @case ('pick') {
+            <ul class="calm__options">
+              @for (option of options(); track option) {
+                <li>{{ option }}</li>
+              }
+            </ul>
+            <p class="calm__hint">
+              לֹא צָרִיךְ לִבְחֹר בְּקוֹל, וְלֹא נִשְׁמָר כָּאן שׁוּם דָּבָר מִמָּה שֶׁתַּגִּידוּ.
+            </p>
+          }
+        }
+
+        <div class="calm__row calm__row--end">
+          <button type="button" class="calm__quiet" (click)="done()">
+            {{ tool().mode === 'steps' ? 'מַסְפִּיק לָנוּ' : 'סִיַּמְנוּ' }}
+          </button>
+        </div>
+      } @else {
+        <p class="calm__outro" role="status">{{ tool().outro }}</p>
+        <div class="calm__row">
+          <button type="button" class="clay-btn clay-btn--ghost" (click)="again()">
+            <pg-icon name="refresh" [size]="20" />
+            עוֹד פַּעַם
+          </button>
+          <button type="button" class="clay-btn clay-btn--ghost" (click)="close()">
+            מַמְשִׁיכִים לִקְרֹא
+          </button>
+        </div>
+      }
+    </div>
+  }
+</aside>

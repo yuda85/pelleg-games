@@ -26,7 +26,7 @@
 .board__clue-tag {
   padding: 3px 14px;
   border-radius: var(--pg-r-pill);
-  background: linear-gradient(160deg, #0891b2, var(--pg-aqua));
+  background: var(--grad-aqua);
   color: var(--pg-on-color);
   font-family: var(--pg-font-display);
   font-size: 0.85rem;
@@ -94,7 +94,7 @@
 }
 
 .socket:hover {
-  background: #dde7f8;
+  background: var(--pg-surface-sunk);
 }
 
 .socket__hole {
@@ -114,7 +114,7 @@
 }
 
 .socket--filled {
-  background: linear-gradient(160deg, #ecfeff, #cffafe);
+  background: var(--tint-mist);
   box-shadow:
     var(--clay-sunk),
     0 0 0 3px rgba(14, 116, 144, 0.35);
@@ -163,7 +163,7 @@
   border: 0;
   /* Droplet silhouette — the same shape as the mascot. */
   border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
-  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  background: var(--grad-tile);
   box-shadow: var(--clay-raised);
   cursor: grab;
   touch-action: none;
@@ -194,7 +194,7 @@
 }
 
 .chip--dot {
-  background: linear-gradient(160deg, #fffbeb, #fde68a);
+  background: var(--tint-paper);
 }
 
 .chip--dot .chip__mark {
@@ -255,7 +255,7 @@
   margin-inline-start: -35px;
   margin-block-start: -46px;
   border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
-  background: linear-gradient(160deg, #ffffff, #cffafe);
+  background: var(--tint-drop);
   box-shadow: var(--clay-raised-lg);
   color: var(--pg-primary);
   /* Must not swallow the elementFromPoint hit-test under the finger. */
@@ -263,6 +263,6 @@
 }
 
 .ghost--dot {
-  background: linear-gradient(160deg, #fffbeb, #fde68a);
+  background: var(--tint-paper);
   color: var(--pg-warn);
 }

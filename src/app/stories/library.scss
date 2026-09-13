@@ -1,0 +1,310 @@
+:host {
+  display: block;
+}
+
+.lib {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 3vw, 22px);
+  padding-block: clamp(18px, 4vw, 34px) clamp(30px, 7vw, 56px);
+}
+
+.lib__head {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+
+.lib__title {
+  flex: 1;
+  min-inline-size: 0;
+
+  h1 {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    color: var(--pg-primary);
+  }
+
+  p {
+    margin: 2px 0 0;
+    font-size: 0.92rem;
+    color: var(--pg-ink-soft);
+  }
+}
+
+.lib__section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  color: var(--pg-aqua);
+}
+
+/* --- continue reading ----------------------------------------------------- */
+
+.resume__row {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+  /* One story is the common case; more than one scrolls rather than squeezing. */
+  overflow-x: auto;
+  scrollbar-width: thin;
+
+  > li {
+    flex: 1 0 min(340px, 88%);
+  }
+}
+
+.resume__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  block-size: 100%;
+  padding: 12px 14px;
+  border-radius: var(--pg-r-lg);
+  background: var(--tint-calm);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.resume__card:hover {
+  filter: brightness(1.04);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.resume__cover {
+  inline-size: 54px;
+  block-size: 72px;
+  flex: 0 0 auto;
+  border-radius: var(--pg-r-sm);
+  box-shadow: var(--clay-raised);
+}
+
+.resume__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.resume__title {
+  font-family: var(--pg-font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.resume__next {
+  font-size: 0.9rem;
+  color: var(--tint-ink);
+  overflow-wrap: anywhere;
+}
+
+.resume__meta {
+  font-size: 0.78rem;
+  color: var(--tint-ink);
+}
+
+.resume__go {
+  --round: 44px;
+}
+
+/* --- search --------------------------------------------------------------- */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  color: var(--pg-ink-soft);
+
+  input {
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: 46px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--pg-ink);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    --round: 36px;
+    color: var(--pg-ink-soft);
+  }
+}
+
+/* Focus lands on the input, so the well around it carries the ring. */
+.search:focus-within {
+  outline: 4px solid var(--pg-aqua);
+  outline-offset: 3px;
+}
+
+/* --- the shelf ------------------------------------------------------------ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: clamp(12px, 2.6vw, 18px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.book {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  padding: 14px;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  color: var(--pg-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.book:hover {
+  filter: brightness(1.03);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.book__cover {
+  position: relative;
+  display: block;
+  margin-bottom: 12px;
+
+  pg-story-cover {
+    block-size: 170px;
+    box-shadow: var(--clay-raised);
+  }
+}
+
+.book__chip {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-scrim-surface);
+  font-family: var(--pg-font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--pg-ink-soft);
+}
+
+.book__chip--done {
+  inset-inline-start: auto;
+  inset-inline-end: 10px;
+  color: var(--pg-success);
+}
+
+.book__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.book__title {
+  font-family: var(--pg-font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  /* A long title wraps to two lines and then trims — it never pushes the card. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.book__blurb {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--pg-ink-soft);
+}
+
+.book__meta,
+.book__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* The counts read as the app's own voice; free-text tags stay neutral. */
+.book__tag--brook {
+  color: var(--pg-aqua);
+}
+
+.book__bar {
+  display: block;
+  block-size: 9px;
+  margin-top: auto;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  overflow: hidden;
+}
+
+.book__fill {
+  display: block;
+  block-size: 100%;
+  border-radius: var(--pg-r-pill);
+  background: var(--grad-rail);
+  transition: inline-size var(--pg-t) var(--pg-ease-out);
+}
+
+.book__progress {
+  font-size: 0.78rem;
+  color: var(--pg-ink-soft);
+}
+
+/* --- empty states --------------------------------------------------------- */
+
+.empty {
+  align-items: center;
+  padding: clamp(28px, 8vw, 56px) 20px;
+  border-radius: var(--pg-r-xl);
+  box-shadow: var(--clay-sunk);
+  text-align: center;
+
+  h2 {
+    font-size: 1.3rem;
+    color: var(--pg-primary);
+  }
+
+  p {
+    margin: 0;
+    max-inline-size: 38ch;
+    color: var(--pg-ink-soft);
+  }
+}

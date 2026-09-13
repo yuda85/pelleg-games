@@ -1,0 +1,578 @@
+<div class="ed pg-shell">
+  <header class="ed__head clay-panel--lg">
+    @if (view() === 'list') {
+      <a routerLink="/stories" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַסִּפְרִיָּה">
+        <pg-icon name="back" [size]="22" />
+      </a>
+    } @else if (view() === 'story') {
+      <button
+        type="button"
+        class="clay-btn clay-btn--ghost"
+        aria-label="חֲזָרָה לִרְשִׁימַת הַסִּפּוּרִים"
+        (click)="backToList()"
+      >
+        <pg-icon name="back" [size]="22" />
+      </button>
+    } @else {
+      <button
+        type="button"
+        class="clay-btn clay-btn--ghost"
+        aria-label="חֲזָרָה לַסִּפּוּר"
+        (click)="backToStory()"
+      >
+        <pg-icon name="back" [size]="22" />
+      </button>
+    }
+
+    <div class="ed__title">
+      <h1>עוֹרֵךְ הַסִּפּוּרִים</h1>
+      <p>הוֹסָפָה וַעֲרִיכָה שֶׁל סִפּוּרִים וּפְרָקִים — בְּלִי לִגַּעַת בַּקּוֹד</p>
+    </div>
+
+    @if (dirty()) {
+      <span class="ed__dirty" role="status">
+        <pg-icon name="pencil" [size]="16" />
+        לֹא נִשְׁמַר
+      </span>
+    }
+  </header>
+
+  <p class="ed__where">
+    <pg-icon name="bulb" [size]="18" />
+    הַסִּפּוּרִים נִשְׁמָרִים בַּדַּפְדְּפָן שֶׁל הַמַּכְשִׁיר הַזֶּה בִּלְבַד. הַיְּצוּא הוּא
+    הַגִּבּוּי, וְהוּא גַּם הַדֶּרֶךְ לְהַעֲבִיר סִפּוּר לְמַכְשִׁיר אַחֵר.
+  </p>
+
+  @if (storageFailed()) {
+    <p class="ed__error" role="alert">
+      <pg-icon name="x" [size]="18" />
+      הַדַּפְדְּפָן חוֹסֵם שְׁמִירָה מְקוֹמִית (גְּלִישָׁה פְּרָטִית אוֹ אֵין מָקוֹם). מַה
+      שֶּׁנִּכְתָּב כָּאן לֹא יִשָּׁמֵר — כְּדַאי לְיַצֵּא לְקֹבֶץ.
+    </p>
+  }
+
+  @if (notice(); as message) {
+    <p class="ed__notice" role="status">{{ message }}</p>
+  }
+
+  <!-- ===================== list ===================== -->
+  @if (view() === 'list') {
+    <div class="ed__bar">
+      <button type="button" class="clay-btn clay-btn--primary" (click)="newStory()">
+        <pg-icon name="plus" [size]="20" />
+        סִפּוּר חָדָשׁ
+      </button>
+      <button type="button" class="clay-btn clay-btn--ghost" (click)="exportAll()">
+        <pg-icon name="download" [size]="20" />
+        יְצוּא הַכֹּל
+      </button>
+      <button
+        type="button"
+        class="clay-btn clay-btn--ghost"
+        [attr.aria-expanded]="importOpen()"
+        (click)="toggleImport()"
+      >
+        <pg-icon name="upload" [size]="20" />
+        יְבוּא
+      </button>
+    </div>
+
+    @if (exportText() !== '') {
+      <section class="clay-panel">
+        <h2>הַיְּצוּא מוּכָן</h2>
+        <p class="panel__hint">הַקֹּבֶץ יָרַד. אֶפְשָׁר גַּם לְהַעְתִּיק אֶת הַ־JSON מִכָּאן.</p>
+        <textarea rows="6" readonly [value]="exportText()" aria-label="תֹּכֶן הַיְּצוּא"></textarea>
+        <button type="button" class="clay-btn clay-btn--ghost" (click)="copyExport()">
+          <pg-icon name="copy" [size]="20" />
+          הַעְתָּקָה
+        </button>
+      </section>
+    }
+
+    @if (importOpen()) {
+      <section class="clay-panel">
+        <h2>יְבוּא סִפּוּרִים</h2>
+        <p class="panel__hint">
+          קֹבֶץ JSON בַּמִּבְנֶה <code dir="ltr">{{ '{ version, stories: [...] }' }}</code> — אוֹתוֹ
+          מִבְנֶה שֶׁהַיְּצוּא כּוֹתֵב. שׁוּם דָּבָר לֹא נִכְתָּב לִפְנֵי שֶׁתְּאַשְּׁרוּ.
+        </p>
+
+        <label class="file">
+          <input type="file" accept="application/json,.json" (change)="onFile($event)" />
+          <span class="clay-btn clay-btn--ghost">
+            <pg-icon name="upload" [size]="20" />
+            בְּחִירַת קֹבֶץ
+          </span>
+        </label>
+
+        <label class="clay-field">
+          <span>אוֹ הַדְבָּקַת JSON</span>
+          <textarea rows="5" (input)="check($any($event.target).value)"></textarea>
+        </label>
+
+        @if (importErrors().length > 0) {
+          <div class="errors ed__error" role="alert">
+            <h3>מַה לֹא תָּקִין</h3>
+            <ul>
+              @for (error of importErrors(); track error) {
+                <li>{{ error }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (pending().length > 0) {
+          <div class="preflight">
+            <h3>{{ pending().length }} סִפּוּרִים תְּקִינִים</h3>
+            <ul class="preflight__list">
+              @for (story of pending(); track story.id) {
+                <li>
+                  <span class="preflight__name">
+                    {{ story.title }}
+                    <small dir="ltr">{{ story.id }}</small>
+                  </span>
+
+                  @if (conflicts().includes(story)) {
+                    <span class="preflight__clash">
+                      <pg-icon name="bulb" [size]="16" />
+                      הַמְּזַהֶה כְּבָר קַיָּם
+                    </span>
+                    <span
+                      class="choice"
+                      role="group"
+                      [attr.aria-label]="'מָה לַעֲשׂוֹת עִם ' + story.title"
+                    >
+                      <button
+                        type="button"
+                        class="clay-btn clay-btn--ghost choice__btn"
+                        [class.choice--on]="modeFor(story.id) === 'copy'"
+                        [attr.aria-pressed]="modeFor(story.id) === 'copy'"
+                        (click)="setMode(story.id, 'copy')"
+                      >
+                        עֹתֶק חָדָשׁ
+                      </button>
+                      <button
+                        type="button"
+                        class="clay-btn clay-btn--ghost choice__btn"
+                        [class.choice--on]="modeFor(story.id) === 'replace'"
+                        [attr.aria-pressed]="modeFor(story.id) === 'replace'"
+                        (click)="setMode(story.id, 'replace')"
+                      >
+                        הַחְלָפָה
+                      </button>
+                    </span>
+                  } @else {
+                    <span class="preflight__ok">
+                      <pg-icon name="check" [size]="16" />
+                      חָדָשׁ
+                    </span>
+                  }
+                </li>
+              }
+            </ul>
+            <button type="button" class="clay-btn clay-btn--go" (click)="applyImport()">
+              <pg-icon name="check" [size]="20" />
+              יְבוּא {{ pending().length }} סִפּוּרִים
+            </button>
+          </div>
+        }
+      </section>
+    }
+
+    @if (hiddenSeeds().length > 0) {
+      <section class="clay-panel">
+        <h2>סִפּוּרִים שֶׁהֻסְתְּרוּ</h2>
+        <p class="panel__hint">
+          סִפּוּרִים שֶׁמְּצֹרָפִים לָאַפְּלִיקַצְיָה וְנִמְחֲקוּ מֵהַמַּכְשִׁיר הַזֶּה. אֶפְשָׁר
+          לְהַחְזִיר אוֹתָם.
+        </p>
+        <ul class="rows">
+          @for (story of hiddenSeeds(); track story.id) {
+            <li class="row">
+              <span class="row__body">
+                <span class="row__title">{{ story.title }}</span>
+                <span class="row__meta" dir="ltr">{{ story.id }}</span>
+              </span>
+              <button type="button" class="clay-btn clay-btn--ghost" (click)="restore(story)">
+                <pg-icon name="refresh" [size]="20" />
+                הַחְזָרָה
+              </button>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (library().length === 0) {
+      <p class="ed__empty clay-panel">
+        אֵין עֲדַיִן סִפּוּרִים. אֶפְשָׁר לְהַתְחִיל בְּ״סִפּוּר חָדָשׁ״.
+      </p>
+    } @else {
+      <ul class="rows">
+        @for (story of library(); track story.id) {
+          <li class="row">
+            <span class="row__body">
+              <span class="row__title">
+                {{ story.title }}
+                @if (isSeed(story.id)) {
+                  <span class="row__chip">מְצֹרָף לָאַפְּלִיקַצְיָה</span>
+                }
+              </span>
+              <span class="row__meta">
+                <span dir="ltr">{{ story.id }}</span> · {{ story.chapters.length }} פְּרָקִים
+              </span>
+            </span>
+            <span class="row__tools">
+              <button type="button" class="clay-round" (click)="edit(story)" aria-label="עֲרִיכָה">
+                <pg-icon name="pencil" [size]="20" />
+              </button>
+              <button
+                type="button"
+                class="clay-round"
+                (click)="duplicate(story)"
+                aria-label="שִׁכְפּוּל"
+              >
+                <pg-icon name="copy" [size]="20" />
+              </button>
+              <button
+                type="button"
+                class="clay-round"
+                (click)="remove(story)"
+                aria-label="מְחִיקָה"
+              >
+                <pg-icon name="trash" [size]="20" />
+              </button>
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  }
+
+  <!-- ===================== story ===================== -->
+  @if (view() === 'story') {
+    @if (draft(); as draft) {
+      <section class="clay-panel">
+        <h2>פְּרָטֵי הַסִּפּוּר</h2>
+
+        <label class="clay-field">
+          <span>שֵׁם הַסִּפּוּר</span>
+          <input
+            type="text"
+            [value]="draft.title"
+            (input)="setField('title', $any($event.target).value)"
+          />
+        </label>
+
+        <label class="clay-field">
+          <span>תַּקְצִיר</span>
+          <textarea
+            rows="3"
+            [value]="draft.blurb"
+            (input)="setField('blurb', $any($event.target).value)"
+          ></textarea>
+        </label>
+
+        <label class="clay-field">
+          <span>תָּגִיּוֹת (מֻפְרָדוֹת בְּפְסִיק)</span>
+          <input
+            type="text"
+            [value]="draft.tagsText"
+            (input)="setField('tagsText', $any($event.target).value)"
+          />
+        </label>
+
+        <label class="clay-field">
+          <span>כְּתֹבֶת עֲטִיפָה (לֹא חוֹבָה)</span>
+          <input
+            type="text"
+            dir="ltr"
+            placeholder="בְּלִי תְּמוּנָה תְּצֻיַּר עֲטִיפַת לַיְלָה אוֹטוֹמָטִית"
+            [value]="draft.cover"
+            (input)="setField('cover', $any($event.target).value)"
+          />
+        </label>
+
+        <label class="clay-field">
+          <span>מְזַהֶה (id)</span>
+          <input
+            type="text"
+            dir="ltr"
+            [value]="draft.id"
+            (input)="setField('id', $any($event.target).value)"
+          />
+          @if (idClash()) {
+            <small class="error" role="alert"
+              >הַמְּזַהֶה הַזֶּה כְּבָר תָּפוּס בְּסִפּוּר אַחֵר.</small
+            >
+          } @else {
+            <small class="hint"
+              >מְשַׁמֵּשׁ לִשְׁמִירַת הַהִתְקַדְּמוּת. עָדִיף לֹא לְשַׁנּוֹת אַחֲרֵי שֶׁמַּתְחִילִים
+              לִקְרֹא.</small
+            >
+          }
+        </label>
+      </section>
+
+      <section class="clay-panel">
+        <div class="panel__head">
+          <h2>פְּרָקִים</h2>
+          <button type="button" class="clay-btn clay-btn--ghost" (click)="addChapter()">
+            <pg-icon name="plus" [size]="20" />
+            פֶּרֶק חָדָשׁ
+          </button>
+        </div>
+
+        @if (draft.chapters.length === 0) {
+          <p class="panel__hint">
+            עוֹד אֵין פְּרָקִים. ״פֶּרֶק חָדָשׁ״ פּוֹתֵחַ שָׂדֶה גָּדוֹל לְהַדְבָּקַת הַטֶּקְסְט.
+          </p>
+        } @else {
+          <ol class="rows">
+            @for (chapter of draft.chapters; track chapter.id; let i = $index) {
+              <li class="row">
+                <span class="row__num" dir="ltr">{{ i + 1 }}</span>
+                <button type="button" class="row__body row__body--btn" (click)="openChapter(i)">
+                  <span class="row__title">{{ chapter.title || 'פֶּרֶק לְלֹא שֵׁם' }}</span>
+                  <span class="row__meta">
+                    {{ chapter.activities.length }} עֲצִירוֹת · {{ chapter.text.length }} תָּוִים
+                  </span>
+                </button>
+                <span class="row__tools">
+                  <button
+                    type="button"
+                    class="clay-round"
+                    (click)="moveChapter(i, -1)"
+                    [disabled]="i === 0"
+                    aria-label="הַעֲלָאָה"
+                  >
+                    <pg-icon name="chevron-up" [size]="20" />
+                  </button>
+                  <button
+                    type="button"
+                    class="clay-round"
+                    (click)="moveChapter(i, 1)"
+                    [disabled]="i === draft.chapters.length - 1"
+                    aria-label="הוֹרָדָה"
+                  >
+                    <pg-icon name="chevron-down" [size]="20" />
+                  </button>
+                  <button
+                    type="button"
+                    class="clay-round"
+                    (click)="removeChapter(i)"
+                    aria-label="מְחִיקַת פֶּרֶק"
+                  >
+                    <pg-icon name="trash" [size]="20" />
+                  </button>
+                </span>
+              </li>
+            }
+          </ol>
+        }
+      </section>
+
+      <div class="ed__save">
+        <button
+          type="button"
+          class="clay-btn clay-btn--go"
+          [disabled]="!canSave()"
+          (click)="save()"
+        >
+          <pg-icon name="check" [size]="20" />
+          שְׁמִירַת הַסִּפּוּר
+        </button>
+        @if (!canSave()) {
+          <small>צָרִיךְ שֵׁם, מְזַהֶה פָּנוּי, וּפֶרֶק אֶחָד לְפָחוֹת עִם שֵׁם.</small>
+        }
+      </div>
+    }
+  }
+
+  <!-- ===================== chapter ===================== -->
+  @if (view() === 'chapter') {
+    @if (chapter(); as chapter) {
+      <section class="clay-panel">
+        <div class="panel__head">
+          <h2>
+            פֶּרֶק <span dir="ltr">{{ chapterIndex() + 1 }}</span>
+          </h2>
+          <button
+            type="button"
+            class="clay-btn clay-btn--ghost"
+            [attr.aria-pressed]="showPreview()"
+            (click)="togglePreview()"
+          >
+            <pg-icon name="eye" [size]="20" />
+            {{ showPreview() ? 'חֲזָרָה לַעֲרִיכָה' : 'תְּצוּגָה מַקְדִּימָה' }}
+          </button>
+        </div>
+
+        @if (!showPreview()) {
+          <label class="clay-field">
+            <span>שֵׁם הַפֶּרֶק</span>
+            <input
+              type="text"
+              [value]="chapter.title"
+              (input)="setChapterField('title', $any($event.target).value)"
+            />
+          </label>
+
+          <label class="clay-field">
+            <span>טֶקְסְט הַפֶּרֶק</span>
+            <textarea
+              class="ed__big"
+              rows="16"
+              [value]="chapter.text"
+              (input)="setChapterField('text', $any($event.target).value)"
+            ></textarea>
+            <small class="hint">
+              שׁוּרָה רֵיקָה מַפְרִידָה בֵּין פִּסְקָאוֹת — זֶה כָּל מַה שֶּׁצָּרִיךְ כְּדֵי
+              לְהַדְבִּיק פֶּרֶק. בְּנוֹסָף:
+              <code dir="ltr">##</code> בִּתְחִלַּת שׁוּרָה הוּא כּוֹתֶרֶת מִשְׁנֶה,
+              <code dir="ltr">---</code> הוּא מַפְרִיד סְצֵנָה, וְ־<code dir="ltr">&gt;</code> הוּא
+              פֶּתֶק שֶׁמּוֹפִיעַ כְּכַרְטִיס (שֶׁלֶט, כַּרְטִיס כְּנִיסָה, פִּסַּת נְיָר).
+            </small>
+            <small class="hint">
+              אִיּוּר בְּאֶמְצַע הַפֶּרֶק: שׁוּרָה
+              <code dir="ltr">![תיאור](stories/שם-הקובץ.webp)</code>. הַקְּבָצִים יוֹשְׁבִים
+              בְּתִיקִיַּת <code dir="ltr">public/stories/</code> וְנִשְׁמָרִים בַּמַּכְשִׁיר יַחַד
+              עִם הָאַפְּלִיקַצְיָה, כָּךְ שֶׁהֵם עוֹבְדִים גַּם בְּלִי אִינְטֶרְנֶט. שׁוּרָה
+              שְׁנִיָּה מִתַּחַת לָאִיּוּר תַּהֲפֹךְ לִכְתֹבֶת מִתַּחַת לַתְּמוּנָה.
+            </small>
+          </label>
+        }
+
+        @if (showPreview()) {
+          <div class="preview">
+            <p class="preview__label">כָּךְ זֶה יֵרָאֶה בְּמָסָךְ הַקְּרִיאָה</p>
+            <div class="preview__page">
+              <h3 class="preview__title">{{ chapter.title || 'פֶּרֶק לְלֹא שֵׁם' }}</h3>
+              <pg-story-blocks [blocks]="previewBlocks()" [openAll]="true" />
+            </div>
+          </div>
+        }
+      </section>
+
+      @if (!showPreview()) {
+        <section class="clay-panel">
+          <div class="panel__head">
+            <h2>עֲצִירוֹת בְּתוֹךְ הַפֶּרֶק</h2>
+            <button type="button" class="clay-btn clay-btn--ghost" (click)="addActivity()">
+              <pg-icon name="plus" [size]="20" />
+              עֲצִירָה
+            </button>
+          </div>
+          <p class="panel__hint">
+            עֲצִירָה הִיא הַצָּעָה, לֹא מִבְחָן: אֵין תְּשׁוּבָה נְכוֹנָה, אֵין נִקּוּד,
+            וְהַבְּחִירָה לֹא מְשַׁנָּה אֶת הָעֲלִילָה.
+          </p>
+
+          @for (activity of chapter.activities; track $index; let i = $index) {
+            <div class="act">
+              <div class="act__head">
+                <span class="act__n" dir="ltr">{{ i + 1 }}</span>
+                <label class="clay-field ed__inline">
+                  <span>סוּג</span>
+                  <select
+                    [value]="activity.kind"
+                    (change)="setActivityKind(i, $any($event.target).value)"
+                  >
+                    @for (kind of activityKinds; track kind) {
+                      <option [value]="kind">{{ activityLabels[kind] }}</option>
+                    }
+                  </select>
+                </label>
+                <button
+                  type="button"
+                  class="clay-round act__del"
+                  (click)="removeActivity(i)"
+                  aria-label="מְחִיקָה"
+                >
+                  <pg-icon name="trash" [size]="20" />
+                </button>
+              </div>
+
+              <label class="clay-field">
+                <span>מָקוֹם בַּפֶּרֶק</span>
+                <select
+                  [value]="activity.after"
+                  (change)="setActivityAnchor(i, $any($event.target).value)"
+                >
+                  @for (anchor of anchors(); track anchor.value) {
+                    <option [value]="anchor.value">{{ anchor.label }}</option>
+                  }
+                </select>
+              </label>
+
+              @if (calmTool(activity.kind); as tool) {
+                <p class="panel__hint">
+                  {{ tool.blurb }} · <span dir="ltr">~{{ tool.seconds }}</span> שְׁנִיּוֹת. כָּל
+                  הַשָּׂדוֹת כָּאן אֵינָם חוֹבָה — מַה שֶּׁנִּשְׁאָר רֵיק לוֹקֵחַ אֶת הַנֻּסָּח שֶׁל
+                  הַכְּלִי עַצְמוֹ.
+                </p>
+              }
+
+              <label class="clay-field">
+                <span>{{ isCalmKind(activity.kind) ? 'שֵׁם (לֹא חוֹבָה)' : 'כּוֹתֶרֶת' }}</span>
+                <input
+                  type="text"
+                  [value]="activity.title"
+                  (input)="setActivityText(i, 'title', $any($event.target).value)"
+                />
+              </label>
+
+              <label class="clay-field">
+                <span>
+                  {{ isCalmKind(activity.kind) ? 'מִשְׁפַּט פְּתִיחָה (לֹא חוֹבָה)' : 'הוֹרָאוֹת' }}
+                </span>
+                <textarea
+                  rows="3"
+                  [value]="activity.instructions"
+                  (input)="setActivityText(i, 'instructions', $any($event.target).value)"
+                ></textarea>
+              </label>
+
+              <label class="clay-field">
+                <span>
+                  {{
+                    isCalmKind(activity.kind)
+                      ? 'שְׁלַבִּים (לֹא חוֹבָה, אֶחָד בְּכָל שׁוּרָה)'
+                      : 'אֶפְשָׁרוּיוֹת בְּחִירָה (לֹא חוֹבָה, אַחַת בְּכָל שׁוּרָה)'
+                  }}
+                </span>
+                <textarea
+                  rows="3"
+                  [value]="activity.optionsText"
+                  (input)="setActivityText(i, 'optionsText', $any($event.target).value)"
+                ></textarea>
+                @if (!isCalmKind(activity.kind)) {
+                  <small class="hint">
+                    שׁוּרָה שֶׁנִּגְמֶרֶת בְּ־<code dir="ltr">= סימן</code> הוֹפֶכֶת אֶת
+                    הָאֶפְשָׁרוּת לְפִצּוּל אֲמִתִּי בָּעֲלִילָה. לְמָשָׁל:
+                    <code dir="ltr">לשמור בכיס = כיס</code>.
+                  </small>
+                }
+              </label>
+            </div>
+          }
+        </section>
+      }
+
+      <div class="ed__save">
+        <button
+          type="button"
+          class="clay-btn clay-btn--go"
+          [disabled]="!canSave()"
+          (click)="save()"
+        >
+          <pg-icon name="check" [size]="20" />
+          שְׁמִירַת הַסִּפּוּר
+        </button>
+        <button type="button" class="clay-btn clay-btn--ghost" (click)="backToStory()">
+          חֲזָרָה לִרְשִׁימַת הַפְּרָקִים
+        </button>
+      </div>
+    }
+  }
+</div>

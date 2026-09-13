@@ -1,0 +1,235 @@
+/* Reading typography. Sizes scale from --read-size, which an ancestor sets —
+   the reader's text-size control, or the editor's preview card.
+   The fallback lives in each `var()` rather than in a `--read-size` declared
+   here: a custom property set on this host would *shadow* the ancestor's and
+   pin the prose to one size. */
+
+:host {
+  display: block;
+}
+
+.para {
+  margin: 0 0 1.15em;
+  font-size: var(--read-size, 1.12rem);
+  line-height: 1.85;
+  color: var(--pg-ink);
+  /* Hebrew does not hyphenate well; a ragged edge beats a stretched line. */
+  text-align: start;
+}
+
+.subhead {
+  margin: 1.9em 0 0.7em;
+  font-family: var(--pg-font-display);
+  font-size: calc(var(--read-size, 1.12rem) * 1.22);
+  color: var(--pg-primary);
+}
+
+/* Something written down inside the story: a ticket, a sign, a strip of paper.
+   Line breaks are the author's, so they are kept rather than collapsed. */
+.note {
+  margin: 1.5em auto;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding: 16px 22px;
+  border-radius: var(--pg-r-md);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-display);
+  font-size: calc(var(--read-size, 1.12rem) * 0.97);
+  line-height: 1.65;
+  white-space: pre-line;
+  color: var(--pg-primary);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* An illustration for this part of the chapter. It sits in the text column and
+   keeps the clay frame, so a picture reads as part of the book rather than as
+   something pasted on top of it. No filter is applied in dark mode: the picture
+   is content, and inverting or dimming art is how illustrations go muddy. */
+.illus {
+  margin: 1.9em 0;
+
+  img {
+    display: block;
+    inline-size: 100%;
+    /* Reserved while it loads, so the paragraph below does not jump. */
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--pg-r-lg);
+    background: var(--pg-surface-sunk);
+    box-shadow: var(--clay-raised);
+  }
+
+  figcaption {
+    margin-block-start: 8px;
+    font-size: calc(var(--read-size, 1.12rem) * 0.78);
+    line-height: 1.6;
+    color: var(--pg-ink-soft);
+    text-align: center;
+  }
+}
+
+/* A breath between scenes — three droplets, the app's own punctuation. */
+.scene {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 1.8em 0;
+
+  span {
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    background: var(--pg-aqua-soft);
+    box-shadow: var(--clay-sunk);
+  }
+}
+
+/* --- optional stops ------------------------------------------------------- */
+
+.stop {
+  margin: 1.8em 0;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  overflow: hidden;
+}
+
+.stop__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  inline-size: 100%;
+  min-block-size: 52px;
+  padding: 14px 16px;
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--pg-t) var(--pg-ease-out);
+}
+
+.stop__head:hover {
+  background: var(--pg-veil-soft);
+}
+
+.stop__badge {
+  display: grid;
+  place-items: center;
+  inline-size: 40px;
+  block-size: 40px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--grad-primary);
+  color: var(--pg-on-color);
+  box-shadow: var(--clay-raised);
+}
+
+.stop__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.stop__kind {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--pg-aqua);
+}
+
+.stop__title {
+  font-family: var(--pg-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  /* A long title wraps rather than pushing the chevron off the card. */
+  overflow-wrap: anywhere;
+}
+
+.stop__chev {
+  flex: 0 0 auto;
+  color: var(--pg-ink-soft);
+}
+
+.stop__body {
+  padding: 0 16px 16px;
+  animation: pg-pop 200ms var(--pg-ease-out);
+}
+
+.stop__what {
+  margin: 0 0 12px;
+  font-size: calc(var(--read-size, 1.12rem) * 0.95);
+  line-height: 1.7;
+  color: var(--pg-ink);
+}
+
+.stop__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 9px 16px;
+    border-radius: var(--pg-r-pill);
+    background: var(--pg-surface);
+    box-shadow: var(--clay-raised);
+    font-family: var(--pg-font-display);
+    font-size: 0.95rem;
+  }
+}
+
+/* A fork looks like a set of real choices, because it is one. */
+.stop--fork .stop__badge {
+  background: var(--grad-aqua);
+}
+
+.stop__forks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.fork {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 48px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-display);
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  cursor: pointer;
+  transition:
+    box-shadow var(--pg-t) var(--pg-ease-out),
+    filter var(--pg-t) var(--pg-ease-out);
+}
+
+.fork:hover {
+  filter: brightness(1.04);
+  box-shadow: var(--clay-raised-lg);
+}
+
+.fork--on {
+  background: var(--grad-aqua);
+  color: var(--on-fill);
+}
+
+/* Said once, on the card, so nobody has to wonder whether this is a test. */
+.stop__note {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--pg-ink-soft);
+}

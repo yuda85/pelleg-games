@@ -1,0 +1,396 @@
+:host {
+  display: block;
+}
+
+.ed {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2.6vw, 18px);
+  padding-block: clamp(18px, 4vw, 34px) clamp(30px, 7vw, 56px);
+}
+
+.ed__head {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+
+.ed__title {
+  flex: 1;
+  min-inline-size: 0;
+
+  h1 {
+    font-size: clamp(1.35rem, 4.8vw, 1.9rem);
+    color: var(--pg-primary);
+  }
+
+  p {
+    margin: 2px 0 0;
+    font-size: 0.86rem;
+    color: var(--pg-ink-soft);
+  }
+}
+
+.ed__dirty {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-warn-well);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--pg-warn);
+}
+
+.ed__where,
+.ed__error,
+.ed__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: var(--pg-r-lg);
+  font-size: 0.87rem;
+  line-height: 1.6;
+}
+
+.ed__where {
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+  color: var(--pg-ink-soft);
+}
+
+.ed__error,
+.errors {
+  background: var(--pg-danger-well);
+  color: var(--pg-danger);
+}
+
+.ed__notice {
+  background: var(--pg-success-well);
+  color: var(--pg-success);
+}
+
+.ed__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ed__empty {
+  margin: 0;
+  box-shadow: var(--clay-sunk);
+  text-align: center;
+  color: var(--pg-ink-soft);
+}
+
+.ed__save {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  inset-block-end: 0;
+  padding: 12px;
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-scrim-surface);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--clay-raised);
+
+  small {
+    font-size: 0.8rem;
+    color: var(--pg-ink-soft);
+  }
+}
+
+/* --- panels --------------------------------------------------------------- */
+
+.clay-panel {
+  h2 {
+    font-size: 1.12rem;
+    color: var(--pg-primary);
+  }
+
+  h3 {
+    font-size: 0.98rem;
+    color: var(--pg-ink);
+  }
+}
+
+.panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.panel__hint {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--pg-ink-soft);
+}
+
+code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--pg-surface-sunk);
+  font-size: 0.85em;
+}
+
+/* --- fields --------------------------------------------------------------- */
+/* The controls themselves are `.clay-field` in styles.scss; only what is
+   specific to this screen lives here. */
+
+.ed__inline {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The paste box. Big enough that a whole chapter does not feel cramped. */
+.ed__big {
+  min-block-size: 320px;
+  font-size: 1.02rem;
+}
+
+/* The real input is hidden but still focusable, so the button is keyboard-reachable. */
+.file {
+  display: inline-flex;
+
+  input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+  }
+
+  input:focus-visible + span {
+    outline: 4px solid var(--pg-aqua);
+    outline-offset: 3px;
+  }
+
+  span {
+    cursor: pointer;
+  }
+}
+
+/* --- rows ----------------------------------------------------------------- */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row,
+.preflight__list > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--pg-r-md);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+}
+
+.row__num,
+.act__n {
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--pg-surface);
+  box-shadow: var(--clay-raised);
+  font-family: var(--pg-font-display);
+  font-weight: 700;
+  color: var(--pg-primary);
+}
+
+.row__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.row__body--btn {
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.row__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--pg-font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--pg-ink);
+  overflow-wrap: anywhere;
+}
+
+.row__chip {
+  padding: 2px 9px;
+  border-radius: var(--pg-r-pill);
+  background: var(--pg-surface);
+  font-size: 0.7rem;
+  color: var(--pg-warn);
+}
+
+.row__meta {
+  font-size: 0.77rem;
+  color: var(--pg-ink-soft);
+}
+
+.row__tools {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+
+  button {
+    --round: 44px;
+  }
+}
+
+/* --- import preflight ----------------------------------------------------- */
+
+.errors {
+  ul {
+    margin: 6px 0 0;
+    padding-inline-start: 20px;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+}
+
+.preflight {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preflight__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.preflight__name {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-inline-size: 0;
+  font-family: var(--pg-font-display);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+
+  small {
+    font-family: var(--pg-font-body);
+    font-size: 0.74rem;
+    font-weight: 400;
+    color: var(--pg-ink-soft);
+  }
+}
+
+.preflight__clash,
+.preflight__ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+}
+
+.preflight__clash {
+  color: var(--pg-warn);
+}
+
+.preflight__ok {
+  color: var(--pg-success);
+}
+
+.choice {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.choice__btn {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.choice--on {
+  --btn-bg: var(--grad-aqua);
+  --btn-fg: var(--pg-on-color);
+  box-shadow: var(--clay-raised);
+}
+
+/* --- activities ----------------------------------------------------------- */
+
+.act {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--pg-r-md);
+  background: var(--pg-surface-sunk);
+  box-shadow: var(--clay-sunk);
+}
+
+.act__head {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.act__n {
+  margin-block-end: 9px;
+  background: var(--grad-primary);
+  box-shadow: none;
+  color: var(--pg-on-color);
+}
+
+.act__del {
+  color: var(--pg-danger);
+}
+
+/* --- preview -------------------------------------------------------------- */
+
+.preview__label {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: var(--pg-aqua);
+}
+
+/* The preview is the reading screen's measure and type, on a page-coloured card. */
+.preview__page {
+  --read-size: 1.12rem;
+  inline-size: min(60ch, 100%);
+  margin-inline: auto;
+  padding: clamp(16px, 4vw, 26px);
+  border-radius: var(--pg-r-lg);
+  background: var(--pg-bg);
+  box-shadow: var(--clay-sunk);
+  font-size: var(--read-size);
+}
+
+.preview__title {
+  margin: 0 0 18px;
+  font-size: calc(var(--read-size) * 1.5);
+  color: var(--pg-primary);
+}

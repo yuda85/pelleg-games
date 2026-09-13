@@ -1,0 +1,160 @@
+<div class="lib pg-shell">
+  <header class="lib__head clay-panel--lg">
+    <a routerLink="/" class="clay-btn clay-btn--ghost" aria-label="חֲזָרָה לַמָּסָךְ הָרָאשִׁי">
+      <pg-icon name="back" [size]="22" />
+    </a>
+    <div class="lib__title">
+      <h1>סִפּוּרִים בְּהֶמְשֵׁכִים</h1>
+      <p>פֶּרֶק לִפְנֵי הַשֵּׁנָה, בְּיַחַד</p>
+    </div>
+    <a
+      routerLink="/stories/editor"
+      class="clay-btn clay-btn--ghost"
+      aria-label="עוֹרֵךְ הַסִּפּוּרִים"
+    >
+      <pg-icon name="pencil" [size]="22" />
+    </a>
+  </header>
+
+  @if (continuing().length > 0) {
+    <section class="resume" aria-labelledby="resume-head">
+      <h2 id="resume-head" class="lib__section">
+        <pg-icon name="bookmark" [size]="20" />
+        מַמְשִׁיכִים לִקְרֹא
+      </h2>
+      <ul class="resume__row">
+        @for (item of continuing(); track item.story.id) {
+          <li>
+            <a
+              class="resume__card"
+              [routerLink]="['/stories', item.story.id, item.resumeChapterId]"
+            >
+              <pg-story-cover
+                class="resume__cover"
+                [storyId]="item.story.id"
+                [cover]="item.story.cover"
+              />
+              <span class="resume__body">
+                <span class="resume__title">{{ item.story.title }}</span>
+                <span class="resume__next">{{ item.resumeChapterTitle }}</span>
+                <span class="resume__meta">
+                  פֶּרֶק {{ item.done + 1 }} מִתּוֹךְ {{ item.chapters }}
+                </span>
+              </span>
+              <span class="clay-round resume__go"><pg-icon name="play" [size]="20" /></span>
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (hasStories()) {
+    <label class="search">
+      <span class="visually-hidden">חִפּוּשׂ סִפּוּר לְפִי שֵׁם אוֹ תָּג</span>
+      <pg-icon name="search" [size]="20" />
+      <input
+        type="search"
+        [value]="query()"
+        (input)="onSearch($any($event.target).value)"
+        placeholder="חִפּוּשׂ לְפִי שֵׁם אוֹ תָּג"
+        autocomplete="off"
+      />
+      @if (query() !== '') {
+        <button
+          type="button"
+          class="clay-round"
+          (click)="clearSearch()"
+          aria-label="נִקּוּי הַחִפּוּשׂ"
+        >
+          <pg-icon name="x" [size]="18" />
+        </button>
+      }
+    </label>
+  }
+
+  @if (!hasStories()) {
+    <div class="empty clay-panel">
+      <pg-mascot mood="idle" [size]="110" />
+      <h2>הַמַּדָּף עוֹד רֵיק</h2>
+      <p>
+        אֶפְשָׁר לְהוֹסִיף סִפּוּר רִאשׁוֹן בָּעוֹרֵךְ, אוֹ לְיַבֵּא קֹבֶץ שֶׁכְּבָר יֵשׁ לָכֶם.
+      </p>
+      <a routerLink="/stories/editor" class="clay-btn clay-btn--primary">
+        <pg-icon name="plus" [size]="20" />
+        לָעוֹרֵךְ
+      </a>
+    </div>
+  } @else if (results().length === 0) {
+    <div class="empty clay-panel" role="status">
+      <pg-icon name="search" [size]="34" />
+      <h2>לֹא מָצָאנוּ סִפּוּר כָּזֶה</h2>
+      <p>אוּלַי בְּמִלָּה אַחֶרֶת?</p>
+      <button type="button" class="clay-btn clay-btn--ghost" (click)="clearSearch()">
+        הַצָּגַת כָּל הַסִּפּוּרִים
+      </button>
+    </div>
+  } @else {
+    <ul class="grid">
+      @for (item of results(); track item.story.id) {
+        <li>
+          <a class="book" [routerLink]="['/stories', item.story.id]">
+            <span class="book__cover">
+              <pg-story-cover [storyId]="item.story.id" [cover]="item.story.cover" />
+              @if (item.finished) {
+                <span class="book__chip book__chip--done">
+                  <pg-icon name="check" [size]="14" />
+                  נִקְרָא
+                </span>
+              }
+            </span>
+
+            <span class="book__body">
+              <span class="book__title">{{ item.story.title }}</span>
+              <span class="book__blurb">{{ item.story.blurb }}</span>
+
+              <span class="book__meta">
+                <span class="clay-tag book__tag--brook">
+                  <pg-icon name="list" [size]="16" />
+                  {{ item.chapters }} פְּרָקִים
+                </span>
+                <span class="clay-tag book__tag--brook">
+                  <pg-icon name="moon" [size]="16" />
+                  <span dir="ltr">~{{ item.minutes }}</span> דַּקּוֹת
+                </span>
+              </span>
+
+              @if (item.story.tags.length > 0) {
+                <span class="book__tags">
+                  @for (tag of item.story.tags; track tag) {
+                    <span class="clay-tag">{{ tag }}</span>
+                  }
+                </span>
+              }
+
+              <span
+                class="book__bar"
+                role="img"
+                [attr.aria-label]="item.done + ' פְּרָקִים מִתּוֹךְ ' + item.chapters"
+              >
+                <span
+                  class="book__fill"
+                  [style.inline-size.%]="item.chapters ? (item.done / item.chapters) * 100 : 0"
+                ></span>
+              </span>
+              <span class="book__progress">
+                @if (item.done === 0) {
+                  עוֹד לֹא הִתְחַלְנוּ
+                } @else if (item.finished) {
+                  סִיַּמְנוּ אֶת הַסִּפּוּר
+                } @else {
+                  {{ item.done }} מִתּוֹךְ {{ item.chapters }} פְּרָקִים
+                }
+              </span>
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</div>

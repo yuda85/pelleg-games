@@ -18,7 +18,7 @@
 
 .stream__bed {
   fill: none;
-  stroke: #bcd3ea;
+  stroke: var(--pg-line-strong);
   stroke-width: 28;
   stroke-linecap: round;
 }
@@ -51,7 +51,7 @@
   inline-size: 74px;
   block-size: 74px;
   border-radius: 50%;
-  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  background: var(--grad-tile);
   box-shadow: var(--clay-raised);
   color: var(--pg-primary);
   font-family: var(--pg-font-display);
@@ -79,16 +79,16 @@
   gap: 3px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--pg-gold);
+  color: var(--pg-gold-text);
 }
 
 .node__btn--done {
-  background: linear-gradient(160deg, #bbf7d0, #4ade80);
-  color: #052e16;
+  background: var(--grad-right);
+  color: var(--on-right);
 }
 
 .node__btn--done .node__stars {
-  color: #713f12;
+  color: var(--on-gold);
 }
 
 /* The next stone to step on gets a ring, not a wobble. */
@@ -101,6 +101,6 @@
 .node__btn--locked {
   background: var(--pg-surface-sunk);
   box-shadow: var(--clay-sunk);
-  color: #94a3b8;
+  color: var(--pg-ink-faint);
   cursor: not-allowed;
 }

@@ -37,6 +37,22 @@
 
   @if (settingsOpen()) {
     <div class="settings">
+      <div class="theme" role="group" aria-label="מַרְאֶה">
+        <span class="theme__label">מַרְאֶה</span>
+        @for (choice of themes; track choice) {
+          <button
+            type="button"
+            class="switch switch--sm"
+            [class.switch--on]="theme() === choice"
+            [attr.aria-pressed]="theme() === choice"
+            (click)="setTheme(choice)"
+          >
+            <pg-icon [name]="themeIcons[choice]" [size]="20" />
+            {{ themeLabels[choice] }}
+          </button>
+        }
+      </div>
+
       <button
         type="button"
         class="switch"

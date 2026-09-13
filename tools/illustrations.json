@@ -1,0 +1,116 @@
+{
+  "_readme": [
+    "Prompts for tools/illustrate.mjs. Edit freely — this is the writing, not the code.",
+    "",
+    "  style     prepended to every prompt, so the whole book looks like one book",
+    "  negative  appended to every prompt",
+    "  sheet     generate this one first; it exists to be used as a reference",
+    "  ref       the id of a sheet to hand the model along with the prompt",
+    "  file      output name; defaults to <id>.png",
+    "",
+    "Prompts are in English because the model follows English art direction more",
+    "reliably. Nothing here contains a real person's name or details — the girl in",
+    "these pictures is נחל, the character."
+  ],
+
+  "style": "Children's book illustration for ages 8-10. Soft 3D clay-render look: rounded, chunky shapes with gentle depth, as if modelled in plasticine and lit from the upper left. Warm night palette — deep indigo and teal shadows, soft cream and amber highlights. Painterly, cosy, a little theatrical. No text, no letters, no words anywhere in the image. Composed with clear empty space so the picture reads small on a phone.",
+
+  "negative": "Do not include any text, captions, letters, numbers, watermarks, logos or signatures. Avoid photorealism, harsh contrast, scary or threatening imagery.",
+
+  "illustrations": [
+    {
+      "id": "cast-nachal",
+      "sheet": true,
+      "story": "_cast",
+      "aspect": "4:3",
+      "prompt": "Character sheet, three views on a plain warm background: a nine-year-old girl called Nachal, standing, three-quarter view, and a close-up of her face. Curly dark brown hair tied back but escaping, olive skin, wide curious brown eyes, a permanent half-smile like she is about to say something. Mustard-yellow jumper, denim dungarees, one red sneaker and one blue sneaker. She carries a battered notebook under one arm. Energetic posture, never still."
+    },
+    {
+      "id": "cast-tamar",
+      "sheet": true,
+      "story": "_cast",
+      "aspect": "4:3",
+      "prompt": "Character sheet, two views on a plain warm background: a nine-year-old girl called Tamar. Straight black hair in a blunt bob, round glasses, calm deadpan expression, very upright posture. Green jumper, grey skirt, high socks. She is holding a green fabric dragon tail in one hand as if it were perfectly normal."
+    },
+    {
+      "id": "cast-pip",
+      "sheet": true,
+      "story": "_cast",
+      "aspect": "4:3",
+      "prompt": "Character sheet of Mr Pip, an elderly short stage manager, on a plain warm background. Round friendly face, half-moon glasses, and an extraordinarily long white moustache whose ends are tied together behind his ears. Waistcoat over a rumpled shirt, sleeves rolled, a hammer in one pocket and a mug in his hand. Kind, unhurried, slightly rumpled."
+    },
+
+    {
+      "id": "teatron-c1-curtain",
+      "story": "nachal-teatron",
+      "ref": "cast-nachal",
+      "prompt": "Nachal alone in the third row of a small empty old theatre, looking up at a heavy sunset-coloured stage curtain that is very slightly moving. Rows of red seats, warm dusty light from a single stage lamp, deep shadows in the wings. She is leaning forward, notebook forgotten on her knees."
+    },
+    {
+      "id": "teatron-c2-jars",
+      "story": "nachal-teatron",
+      "prompt": "A narrow storeroom lined with wooden shelves, crowded with glass jars. Inside each jar floats a small drifting light in a different colour — amber, pink, pale green, blue. On the top shelf sits a very small creature wearing a coat sewn from strips of paper, with a pair of closed scissors on its head like a pointed hat. Cosy and strange rather than frightening."
+    },
+
+    {
+      "id": "teatron-c3-spaghetti",
+      "story": "nachal-teatron",
+      "ref": "cast-nachal",
+      "prompt": "Two girls taking a bow on a small theatre stage, lit warm amber. One wears paper dragon wings; the other has her arms spread wide like a butterfly. Beside them stands a kettle wearing a crown on a stool, and a wooden toy duck on wheels. Long strands of imaginary spaghetti are draped everywhere. The front row of the audience is a blur of laughing faces. Joyful, chaotic, the best night of the year."
+    },
+    {
+      "id": "doar-c1-box",
+      "story": "nachal-doar",
+      "ref": "cast-nachal",
+      "prompt": "A narrow alley behind a theatre at dusk. A squat old green postbox, about as tall as a child, with a slot in its side and a heavy iron crank handle like a mincer. Paint peeling. Nachal is turning the handle with both hands and her whole body; Tamar watches with her arms folded. A single white envelope is emerging from the slot."
+    },
+    {
+      "id": "doar-c2-sorting",
+      "story": "nachal-doar",
+      "ref": "cast-nachal",
+      "prompt": "A tiny sorting room the size of a broom cupboard, lit by one bare bulb. A wooden sorting table, three deep drawers, and a huge heap of unopened envelopes piled across the floor, each stamped with a red mark. Nachal stands knee-deep in the heap holding one envelope up to the light. Dust in the air."
+    },
+    {
+      "id": "doar-c3-drawers",
+      "story": "nachal-doar",
+      "prompt": "Close view of three wooden drawers in a row, freshly labelled with hand-written paper tags in a child's handwriting, pulled slightly open. Neat stacks of sorted envelopes inside. A wooden toy duck on wheels sits on top of the cabinet, facing the viewer. Warm lamplight, calm and satisfying."
+    },
+
+    {
+      "id": "tsayar-c1-city",
+      "story": "nachal-tsayar",
+      "ref": "cast-nachal",
+      "prompt": "A vast painted canvas backdrop unrolled across a stage floor, showing a whole painted city: rooftops, staircases, washing lines, a cat on a railing, one window with a warm light on. In the lower right corner of the canvas there is a conspicuously blank square of bare cloth. Nachal is kneeling at the edge of the canvas, small against it, looking at the empty corner."
+    },
+    {
+      "id": "tsayar-c2-hand",
+      "story": "nachal-tsayar",
+      "prompt": "Night in a dark theatre. A single shaft of light falls on the lower corner of a huge painted backdrop. From the shadows at the edge of the frame reaches one very old hand, covered in permanent paint stains, holding a rag. Tense and quiet, not frightening — the hand is hesitant, not grasping."
+    },
+    {
+      "id": "tsayar-c3-signature",
+      "story": "nachal-tsayar",
+      "ref": "cast-nachal",
+      "prompt": "Close view of the corner of a painted canvas, lit by a work lamp. A child's paintbrush rests against it. Beside it stands a very small, very old painter with enormous paint-stained hands, looking at the corner. Nachal stands next to him holding a jar of water. Quiet, warm, a little solemn."
+    },
+
+    {
+      "id": "shtika-c1-stage",
+      "story": "nachal-shtika",
+      "ref": "cast-nachal",
+      "prompt": "A child alone in the centre of a bare stage under a single warm spotlight, seen from the back of the empty auditorium. Nachal stands with her arms held slightly away from her sides, clearly trying very hard not to move. A big wall clock is visible at the edge of the frame. Funny and tender rather than tense."
+    },
+    {
+      "id": "shtika-c2-stopwatch",
+      "story": "nachal-shtika",
+      "ref": "cast-nachal",
+      "prompt": "Nachal sitting in the third row of a dark auditorium, cross-legged on the seat, an open notebook on her knees and a heavy old brass stopwatch on a chain held up in one hand. The stage beyond her is lit amber and empty. She looks completely in charge."
+    },
+    {
+      "id": "shtika-c3-lantern",
+      "story": "nachal-shtika",
+      "ref": "cast-nachal",
+      "prompt": "Two girls standing on a stage in low amber light. One holds up a small lantern that lights both their faces from below; the other stands two steps behind her, saying nothing. The auditorium beyond is dark and completely still. Warm, hushed, the best moment of the evening."
+    }
+  ]
+}

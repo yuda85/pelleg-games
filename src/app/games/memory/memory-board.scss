@@ -42,7 +42,7 @@
   border: 0;
   /* A shell: rounded at the top, hinged along the bottom. */
   border-radius: 46% 46% 18% 18% / 55% 55% 20% 20%;
-  background: linear-gradient(160deg, #fce7f3, #f9a8d4);
+  background: var(--tint-shell);
   box-shadow: var(--clay-raised);
   cursor: pointer;
   overflow: hidden;
@@ -76,7 +76,7 @@
 }
 
 .shell--open {
-  background: linear-gradient(160deg, #ffffff, #e0f2fe);
+  background: var(--grad-tile);
   border-radius: var(--pg-r-md);
   box-shadow: var(--clay-sunk);
   animation: pg-pop 220ms var(--pg-ease-out);
@@ -102,12 +102,12 @@
 }
 
 .shell--matched {
-  background: linear-gradient(160deg, #bbf7d0, #4ade80);
+  background: var(--grad-right);
   cursor: default;
 }
 
 .shell--matched .shell__text {
-  color: #052e16;
+  color: var(--on-right);
 }
 
 .shell--wrong {
